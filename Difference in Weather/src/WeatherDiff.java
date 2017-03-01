@@ -5,12 +5,9 @@ public class WeatherDiff {
 	Scanner input = new Scanner (new File("./data/weather.txt"));
 	double first = input.nextDouble();
 	double second = input.nextDouble();
-	double diff =  (second -first);
+	double diff =  (second - first);
 	for(int i=0;i<7;i++){
 		System.out.println(first + " to " + second + ", change = " + (diff));
 	}
 	}
 }
-	
-	
-
