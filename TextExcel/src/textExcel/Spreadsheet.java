@@ -1,24 +1,18 @@
 package textExcel;
-import java.util.*;
 // Update this file with your own code.
 
 public class Spreadsheet implements Grid
 {
+	private Cell [][] sheet;
 	public Spreadsheet(){
-		int i = 0;
-		int j = 0;
-		String Cell [][] = new String [i][j];
-		for (int k =0;k<Cell.length;k++){
-			for (int h = 0;h<Cell[k].length;h++){
-				Cell[k][h]="";
+		for (int k =0;k<sheet.length;k++){
+			for (int h = 0;h<sheet[k].length;h++){
+				sheet[k][h] = new EmptyCell();
 			}
 		}
-		return;
 	}
-
-
-
-
+	
+		
 	@Override
 	public String processCommand(String command)
 	{// TODO Auto-generated method stub
@@ -27,22 +21,20 @@ public class Spreadsheet implements Grid
 	}
 
 	@Override
-	public int getRows()
-	{// TODO Auto-generated method stub
+	public int getRows(){// TODO Auto-generated method stub
 		
-		return 0;
+		return 20;
 	}
 
 	@Override
-	public int getCols()
-	{
-		// TODO Auto-generated method stub
-		return 0;
+	public int getCols(){// TODO Auto-generated method stub
+		
+		return 12;
 	}
 
 	@Override
-	public Cell getCell(Location loc)
-	{
+	public Cell getCell(Location loc){
+	
 		// TODO Auto-generated method stub
 		return null;
 	}

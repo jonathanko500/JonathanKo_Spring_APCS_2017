@@ -13,6 +13,6 @@ public class TextExcel
     	String input = userInput.next();
     		while (input != "quit") {
     		}
-    	System.out.println(processCommand(input));
+    	System.out.println();
 	}
 }
