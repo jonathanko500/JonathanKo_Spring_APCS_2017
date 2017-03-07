@@ -3,7 +3,8 @@ package textExcel;
 
 public class Spreadsheet implements Grid
 {
-	private Cell [][] sheet;
+	private Cell[][]sheet;
+	
 	public Spreadsheet(){
 		for (int k =0;k<sheet.length;k++){
 			for (int h = 0;h<sheet[k].length;h++){
@@ -12,7 +13,6 @@ public class Spreadsheet implements Grid
 		}
 	}
 	
-		
 	@Override
 	public String processCommand(String command)
 	{// TODO Auto-generated method stub
