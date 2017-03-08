@@ -7,16 +7,14 @@ public class SpreadsheetLocation implements Location
 	
 	
     @Override
-    public int getRow()
-    {
-        // TODO Auto-generated method stub
+    public int getRow(){// TODO Auto-generated method stub
+    
         return 20;
     }
 
     @Override
-    public int getCol()
-    {
-        // TODO Auto-generated method stub
+    public int getCol(){// TODO Auto-generated method stub
+        
         return 12;
     }
     
