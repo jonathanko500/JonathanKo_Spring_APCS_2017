@@ -14,31 +14,29 @@ public class Spreadsheet implements Grid{
 	}
 	
 	@Override
-	public String processCommand(String command){// TODO Auto-generated method stub
+	public String processCommand(String command){
 		String d="";
 		return d;
 	}
 
 	@Override
-	public int getRows(){// TODO Auto-generated method stub
+	public int getRows(){
 		return sheet.length;
 	}
 
 	@Override
-	public int getCols(){// TODO Auto-generated method stub
+	public int getCols(){
 		return sheet[0].length;
 	}
 
 	@Override
-	public Cell getCell(Location loc){// TODO Auto-generated method stub
+	public Cell getCell(Location loc){
 		
 		return null;
 	}
 
 	@Override
-	public String getGridText()
-	{
-		// TODO Auto-generated method stub
+	public String getGridText(){
 		return null;
 	}
 

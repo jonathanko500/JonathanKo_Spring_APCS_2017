@@ -7,20 +7,25 @@ public class SpreadsheetLocation implements Location
 	
 	
     @Override
-    public int getRow(){// TODO Auto-generated method stub
-    
+    public int getRow(){
         return 20;
     }
 
     @Override
-    public int getCol(){// TODO Auto-generated method stub
-        
+    public int getCol(){  
         return 12;
     }
     
-    public SpreadsheetLocation(String cellName)
-    {
-        // TODO: Fill this out with your own code
+    public SpreadsheetLocation(String cellName){
+    	char rowName;
+    	char colsName;
+    	for (int i=0;i<20;i++){
+    		rowName = (char) ('A' +i);
+    	}
+    	for (int j=0;j<12;j++){
+    		colsName = (char) ();
+    	}
     }
 
 }
+;
