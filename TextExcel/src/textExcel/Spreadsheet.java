@@ -32,12 +32,32 @@ public class Spreadsheet implements Grid{
 	@Override
 	public Cell getCell(Location loc){
 		
-		return null;
+		return sheet[loc.getRow()][loc.getCol()];
 	}
 
 	@Override
 	public String getGridText(){
-		return null;
+		String grid = "";
+		grid += "    |";
+		char colsStart = 'A';
+		for(int i=0;i<12;i++){//makes the columns
+			grid += ((char)(colsStart))+ "        |";
+			colsStart +=1;
+		}
+		grid += "\n";
+		
+		for (int i=0;i<20;i++){
+			if(i<9){
+				grid += (i+1)+"  |";//single digit row value
+			}else {
+				grid += (i+1) + " |";//2 digit row value
+			}
+			for(int j = 0; j<12 ; j++){
+				grid += sheet[i][j].abbreviatedCellText() + "|";
+			}
+			grid += "    ";
+		}
+		return grid;
 	}
 
 }

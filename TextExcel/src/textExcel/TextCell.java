@@ -1,17 +1,32 @@
 package textExcel;
 
 public class TextCell implements Cell {
+	private String cellInput;
+	public TextCell (String input){
+		cellInput=input;
+	}
 
 	@Override
-	public String abbreviatedCellText() {// TODO Auto-generated method stub
-		
-		return null;
+	public String abbreviatedCellText() {
+		String returnInput=cellInput;
+		int cellLength=cellInput.length();
+		if(cellInput.length()<10){
+			while (returnInput.length()<10){
+				returnInput+=" ";
+			}
+			return returnInput;
+		} else if (cellInput.length()>10){
+			returnInput=returnInput.substring(0,10);
+			return returnInput;
+		}else{
+			return cellInput;
+		}
 	}
 
 	@Override
 	public String fullCellText() {// TODO Auto-generated method stub
 		
-		return null;
+		return "\"" + cellInput +"\"";
 	}
 
 }
