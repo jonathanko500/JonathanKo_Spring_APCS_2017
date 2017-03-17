@@ -15,8 +15,12 @@ public class Spreadsheet implements Grid{
 	
 	@Override
 	public String processCommand(String command){
-		String d="";
-		return d;
+		String x="";
+		public String inspect{
+			
+		}
+		
+		return x;
 	}
 
 	@Override
@@ -37,27 +41,27 @@ public class Spreadsheet implements Grid{
 
 	@Override
 	public String getGridText(){
-		String grid = "";
-		grid += "    |";
+		String spreadsheet = "";
+		spreadsheet += "    |";
 		char colsStart = 'A';
 		for(int i=0;i<12;i++){//makes the columns
-			grid += ((char)(colsStart))+ "        |";
+			spreadsheet += ((char)(colsStart))+ "        |";
 			colsStart +=1;
 		}
-		grid += "\n";
+		spreadsheet += "\n";
 		
 		for (int i=0;i<20;i++){
 			if(i<9){
-				grid += (i+1)+"  |";//single digit row value
+				spreadsheet += (i+1)+"  |";//single digit row value
 			}else {
-				grid += (i+1) + " |";//2 digit row value
+				spreadsheet += (i+1) + " |";//2 digit row value
 			}
 			for(int j = 0; j<12 ; j++){
-				grid += sheet[i][j].abbreviatedCellText() + "|";
+				spreadsheet += sheet[i][j].abbreviatedCellText() + "|";
 			}
-			grid += "    ";
+			spreadsheet += "    ";
 		}
-		return grid;
+		return spreadsheet;
 	}
 
 }
