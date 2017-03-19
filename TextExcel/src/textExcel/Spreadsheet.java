@@ -15,14 +15,26 @@ public class Spreadsheet implements Grid{
 	
 	@Override
 	public String processCommand(String command){
-		String x="";
-		public String inspect{
-			
-		}
+		String location = command;
+		if (location.equalsIgnoreCase("clear")){//clears entire spreadsheet
+			for(int i=0;i<sheet.length;i++){
+				for (int j=0;j<sheet[i].length;j++){
+					sheet[i][j] = new EmptyCell();
+				}
+			}
+			return (getGridText());
+		} else if (location.equalsIgnoreCase("clear" + sheet)){
+			int i=0;
+			int j=0;
+			sheet[i][j]=sheet[getRows()][getCols()];
+			sheet[i][j] = new EmptyCell();
+			return (getGridText());
+			}
 		
-		return x;
+		return "";
+		
+		
 	}
-
 	@Override
 	public int getRows(){
 		return sheet.length;

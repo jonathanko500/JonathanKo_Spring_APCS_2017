@@ -8,6 +8,49 @@
 	<description>Planet Eclipse - http://planeteclipse.org/planet/</description>
 
 <item>
+	<title>Orion: Announcing Orion 14</title>
+	<guid isPermaLink="false">http://planetorion.org/news/?p=878</guid>
+	<link>http://planetorion.org/news/2017/03/announcing-orion-14/</link>
+	<description>&lt;p&gt;We are pleased to announce the fourteenth release of Orion, “Your IDE in the Cloud”. You can run it now on &lt;a href=&quot;https://orionhub.org&quot;&gt;OrionHub&lt;/a&gt; or &lt;a href=&quot;http://download.eclipse.org/orion/drops/R-14.2-201703170901/index.html&quot;&gt;download the server&lt;/a&gt; to run your own instance. Once again, thank you to all committers and contributors for your hard work this release.  There were 150 &lt;a href=&quot;https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=RESOLVED&amp;amp;bug_status=VERIFIED&amp;amp;bug_status=CLOSED&amp;amp;classification=ECD&amp;amp;list_id=16007571&amp;amp;product=Orion&amp;amp;query_format=advanced&amp;amp;resolution=FIXED&amp;amp;target_milestone=14.0&quot;&gt;bugs and enhancements&lt;/a&gt; fixed, across more than 380 commits from 14 authors!&lt;/p&gt;
+&lt;p&gt;What’s new in Orion 14?  This release was focussed on quality and ease of use – Orion 14 is more accessible (better colours and accessibility), easier to start coding in (the tools now automatically understand complex project configurations, so you don’t have to), and just more awesome in general.&lt;/p&gt;
+&lt;p&gt;We continued to improve the Node.js server (which is used on &lt;a href=&quot;http://orion.eclipse.org&quot;&gt;orion.eclipse.org&lt;/a&gt; or &lt;a href=&quot;https://wiki.eclipse.org/Orion/Node/Getting_started&quot;&gt;locally&lt;/a&gt;), and continued to improve our &lt;a href=&quot;https://wiki.eclipse.org/Orion/Documentation/Developer_Guide/Electron&quot;&gt;Electron app&lt;/a&gt;. Lastly, we began work in 14.0 to provide &lt;a href=&quot;https://git.eclipse.org/r/#/c/90145/&quot;&gt;collaborative&lt;/a&gt; development support and &lt;a href=&quot;https://git.eclipse.org/r/#/c/93161/&quot;&gt;debugging&lt;/a&gt; support directly in Orion! Stay tuned in Orion 15 for these features to officially land.&lt;/p&gt;
+&lt;p&gt;Enjoy!&lt;/p&gt;</description>
+	<pubDate>Fri, 17 Mar 2017 18:56:01 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: EclipseCon France: Last Chance to Submit!</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/gPuHBFNepMg/cfp</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/gPuHBFNepMg/cfp</link>
+	<description>March 29 is the final submission deadline for EclipseCon France. Visit the CFP page for info. See you in Toulouse this June!&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/gPuHBFNepMg&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Fri, 17 Mar 2017 14:25:00 +0000</pubDate>
+</item>
+<item>
+	<title>Paolo Patierno: Vert.x and IoT in Rome : what a meetup !</title>
+	<guid isPermaLink="false">http://paolopatierno.wordpress.com/?p=4147</guid>
+	<link>https://paolopatierno.wordpress.com/2017/03/17/vert-x-and-iot-in-rome-what-a-meetup/</link>
+	<description>&lt;p style=&quot;text-align: justify;&quot;&gt;Yesterday I had a great day in Rome for a meetup hosted by &lt;a href=&quot;https://www.meetup.com/Meet-cast/&quot; target=&quot;_blank&quot;&gt;Meet{cast}&lt;/a&gt; (powered by &lt;a href=&quot;http://dotnetpodcast.com/&quot; target=&quot;_blank&quot;&gt;dotnetpodcast&lt;/a&gt; community) and &lt;a href=&quot;http://www.codemotionworld.com/&quot; target=&quot;_blank&quot;&gt;Codemotion&lt;/a&gt;, speaking about &lt;a href=&quot;http://vertx.io/&quot; target=&quot;_blank&quot;&gt;Vert.x&lt;/a&gt; and how we can use it for developing “end to end” Internet of Things solutions.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;17352445_10208955590111131_6229030843024604532_n&quot; class=&quot;alignnone size-full wp-image-4159&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/17352445_10208955590111131_6229030843024604532_n.jpg?w=620&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;17352567_10208955588791098_766816304298598626_n&quot; class=&quot;alignnone size-full wp-image-4161&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/17352567_10208955588791098_766816304298598626_n.jpg?w=620&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;I started with an high level introduction on Vert.x and how it works, its internals and its main usage then I moved to dig into some specific components useful for developing IoT applications like the MQTT server, AMQP Proton and Kafka client.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;17342690_10208955588751097_8818320599257580571_n&quot; class=&quot;alignnone size-full wp-image-4165&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/17342690_10208955588751097_8818320599257580571_n.jpg?w=620&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;17352571_10208955588951102_2851165399929439718_n&quot; class=&quot;alignnone size-full wp-image-4168&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/17352571_10208955588951102_2851165399929439718_n.jpg?w=620&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;It was interesting to know that even in Italy a lot of developers and companies are moving to use Vert.x for developing microservices based solutions. A lot of interesting questions came out … people seem to like it !&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Finally, in order to prove the Vert.x usage in enterprise applications I showed two real use cases that today work thanks to the above components : &lt;a href=&quot;https://www.eclipse.org/hono/&quot; target=&quot;_blank&quot;&gt;Eclipse Hono&lt;/a&gt; and &lt;a href=&quot;https://github.com/EnMasseProject/enmasse&quot; target=&quot;_blank&quot;&gt;EnMasse&lt;/a&gt;. I had few time to explain better how EnMasse works in details, the Qpid Dispatch Router component in particular and for this reason I hope to have a future meetup on that, the AMQP router concept is quite new today ! In any case, knowing that such a scalable platform is based (even) on Vert.x was a great news for the attendees.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;17264802_10208955590191133_8923182437405273553_n&quot; class=&quot;alignnone size-full wp-image-4170&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/17264802_10208955590191133_8923182437405273553_n.jpg?w=620&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;If you are interested to know more about that, you can take a look to the &lt;a href=&quot;https://www.slideshare.net/paolopat/reactive-internet-of-thins-the-vertx-way&quot; target=&quot;_blank&quot;&gt;slides&lt;/a&gt; and the &lt;a href=&quot;https://github.com/ppatierno/reactive-iot-vertx&quot; target=&quot;_blank&quot;&gt;demo&lt;/a&gt;. In the coming days, the video of the meetup will be available online but it will be in Italian (my apologies for my English only friends :-)). Hope you’ll enjoy the content !&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Of course, I had some networking with attendees after the meetup and … with some beer &lt;img alt=&quot;🙂&quot; class=&quot;wp-smiley&quot; src=&quot;https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/1f642.png&quot; style=&quot;height: 1em;&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;17310150_1421561734583219_8414988688301135801_o&quot; class=&quot;alignnone size-full wp-image-4191&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/17310150_1421561734583219_8414988688301135801_o.jpg?w=620&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/paolopatierno.wordpress.com/4147/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/paolopatierno.wordpress.com/4147/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=paolopatierno.wordpress.com&amp;amp;blog=15467422&amp;amp;post=4147&amp;amp;subd=paolopatierno&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;&lt;/p&gt;</description>
+	<pubDate>Fri, 17 Mar 2017 10:45:11 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: Congratulations to the Open IoT Challenge 3.0 Winners!</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/vfK7sx0arcc/openiotchallenge3_winners.php</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/vfK7sx0arcc/openiotchallenge3_winners.php</link>
+	<description>Eclipse IoT is pleased to announce the winners of the third annual Open IoT Challenge.&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/vfK7sx0arcc&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Thu, 16 Mar 2017 15:15:00 +0000</pubDate>
+</item>
+<item>
 	<title>JBoss Tools Team: JBoss Tools 4.4.4.AM1 for Eclipse Neon.2</title>
 	<guid isPermaLink="true">https://tools.jboss.org/blog/4.4.4.am1-for-neon.2.html</guid>
 	<link>https://tools.jboss.org/blog/4.4.4.am1-for-neon.2.html</link>
@@ -692,108 +735,6 @@ sudo scope launch
 	<link>https://medium.com/@mikael.barbero/rfps-for-new-friends-of-eclipse-enhancement-program-feep-projects-posted-e957f853cbc9?source=rss-4a3bd8487ad8------2</link>
 	<description>&lt;p&gt;The Eclipse Foundation is actively seeking bids on &lt;strong&gt;10 new &lt;/strong&gt;&lt;a href=&quot;https://eclipse.org/contribute/dev_program.php&quot;&gt;&lt;strong&gt;FEEP&lt;/strong&gt;&lt;/a&gt;&lt;strong&gt; Development Efforts&lt;/strong&gt;, along with 5 outstanding Development Efforts that have not yet been bid. The objective is to have this work completed in the 1st quarter of 2017.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;https://projects.eclipse.org/development-efforts&quot;&gt;list of development efforts&lt;/a&gt;, and &lt;strong&gt;submit your bids before December 23, 2016&lt;/strong&gt;. See the &lt;a href=&quot;https://eclipse.org/contribute/dev_program/faq.php&quot;&gt;FAQ for the bidding process&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;This list has been crafted based on the feedbacks of the Eclipse PMC and the Eclipse Architecture council members. It also gathered some of the most wanted bugs on the bugzilla (i.e. the bugs with the highest number of votes).&lt;/p&gt;&lt;p&gt;As a reminder, the &lt;a href=&quot;https://eclipse.org/contribute/dev_program.php&quot;&gt;FEEP program&lt;/a&gt; uses the funds donated to the Eclipse Foundation to make direct improvements and enhancements to the Eclipse IDE/Platform.&lt;/p&gt;&lt;p&gt;&lt;em&gt;Originally published at &lt;/em&gt;&lt;a href=&quot;https://mikael-barbero.tumblr.com/post/154241861340/rfps-for-new-friends-of-eclipse-enhancement&quot;&gt;&lt;em&gt;mikael-barbero.tumblr.com&lt;/em&gt;&lt;/a&gt;&lt;em&gt;.&lt;/em&gt;&lt;/p&gt;&lt;img height=&quot;1&quot; src=&quot;https://medium.com/_/stat?event=post.clientViewed&amp;amp;referrerSource=full_rss&amp;amp;postId=e957f853cbc9&quot; width=&quot;1&quot; /&gt;</description>
 	<pubDate>Tue, 07 Mar 2017 11:25:00 +0000</pubDate>
-</item>
-<item>
-	<title>Mikael Barbero: EclipseConverge 2017 Submissions are open</title>
-	<guid isPermaLink="false">https://medium.com/p/6dfa773f0334</guid>
-	<link>https://medium.com/@mikael.barbero/eclipseconverge-2017-submissions-are-open-6dfa773f0334?source=rss-4a3bd8487ad8------2</link>
-	<description>&lt;p&gt;The call for papers for &lt;a href=&quot;https://www.eclipseconverge.org/na2017/&quot;&gt;EclipseConverge 2017&lt;/a&gt; is open. It is the first step toward what ought to be another great Eclipse event. For those who may not know, Eclipse Converge is a new event for the Eclipse community. It is a one-day summit dedicated exclusively to Eclipse technologies, with the goal of allowing our North American developer community to meet and share ideas.&lt;/p&gt;&lt;p&gt;As you may know, I am leading the program committee this year as program chair. We worked hard to make the best call for papers we possibly could. We designed the tracks carefully so that anyone near or far from the core Eclipse community will feel welcome to submit a speaking proposal about all the inspiring, innovative and interesting stuff they are doing in or with Eclipse. By the way, you can see us on the &lt;a href=&quot;https://www.eclipseconverge.org/na2017/programcommittee&quot;&gt;PC page&lt;/a&gt; and contact us anytime via &lt;a href=&quot;http://info@eclipsecon.org&quot;&gt;email&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;This year, we will have four tracks:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Eclipse Platforms &amp;amp; Runtimes&lt;/strong&gt;. Eclipse is an IDE and also a host for a lot of great open-source runtime technologies such as Equinox, RAP, RCP, and the Eclipse 4 Application Platform. New technologies from the vibrant Eclipse ecosystem as well as state-of-the-union talks go here.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Languages &amp;amp; Tools&lt;/strong&gt;. There are countless plugins and tools based on Eclipse to support developers in their daily work. Tell us about the best ones built on Eclipse, how you have built them, and/or what technologies they&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Web &amp;amp; Cloud&lt;/strong&gt;. If you are implementing Web / JEE applications or want to share your experience with modern web frameworks such as AngularJS, Vaadin, or JSON Forms, your talk goes here. This is also the track for talks about cloud development and operation tools at Eclipse such as Orion, Che, Flux, Dirigible, or other ways to move tooling to the cloud, such as browser-based UIs for developer tools and next-generation&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Other Cool Stuff&lt;/strong&gt;. Not everything will fit easily into one of these tracks. If your talk is one that’s hard to categorize, submit it here!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The submission deadline is &lt;strong&gt;December 12, 2016, at 11:59 PM PST&lt;/strong&gt;. There’s no time for procrastination! Go ahead and &lt;a href=&quot;https://www.eclipseconverge.org/na2017/propose-session&quot;&gt;submit yours now&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;&lt;em&gt;Originally published at &lt;/em&gt;&lt;a href=&quot;https://mikael-barbero.tumblr.com/post/153209914535/eclipseconverge-2017-submissions-are-open&quot;&gt;&lt;em&gt;mikael-barbero.tumblr.com&lt;/em&gt;&lt;/a&gt;&lt;em&gt;.&lt;/em&gt;&lt;/p&gt;&lt;img height=&quot;1&quot; src=&quot;https://medium.com/_/stat?event=post.clientViewed&amp;amp;referrerSource=full_rss&amp;amp;postId=6dfa773f0334&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Tue, 07 Mar 2017 11:22:33 +0000</pubDate>
-</item>
-<item>
-	<title>vert.x project: Vert.x 3.4.0 is released !</title>
-	<guid isPermaLink="true">http://vertx.io/blog/vert-x-3-4-0-is-released</guid>
-	<link>http://vertx.io/blog/vert-x-3-4-0-is-released</link>
-	<description>&lt;article&gt;&lt;p&gt;Vert.x 3.4.0 has just been released with many new exciting features!&lt;/p&gt;
-&lt;p&gt;Since the beginning Vert.x has provided a polyglot runtime, this version simply adds the support of two major languages
-of the JVM ecosystem: Scala 2.12 and Kotlin 1.1.&lt;/p&gt;
-&lt;p&gt;Some features are so important that they deserve to be taken to another level : the Vert.x Web Client focuses on usability
-features for building web applications. It actually builds upon the multi purpose and scalable Http Client and inherits
-all its features.&lt;/p&gt;
-&lt;p&gt;Vert.x RxJava is a very popular extension, 3.4 supports the &lt;code&gt;rx.Single&lt;/code&gt; reactive type as well as &lt;code&gt;Observable&lt;/code&gt;
-&lt;em&gt;reactive pull back pressure&lt;/em&gt;, combined with Vert.x Web Client, it is a very powerful combo.&lt;/p&gt;
-&lt;p&gt;You can now get a stream for large result sets using JDBC client, with RxJava your stream becomes
-naturally an &lt;code&gt;Observable&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;When it comes to IoT, Vert.x is a relevant choice thanks to its unique toolkit approach that combines
- modularity and reduced footprint, there are no doubts that the new Vert.x MQTT Server extends Vert.x capabilities
- in this field!&lt;/p&gt;
-&lt;p&gt;Everyone knows Kafka, everyone loves Kafka, the new Vert.x Kafka Client gives you everything you need to use Kafka
-the Vert.x way!&lt;/p&gt;
-&lt;p&gt;On the microservices side, Vert.x gRPC will give a boost to your networking and Vert.x Config fills the gap
-in our toolbox. In addition we provide now a full fledged Vert.x Consul client!&lt;/p&gt;
-&lt;p&gt;During this release cycle, we paid special attention to security, ensuring that Vert.x-Web sessions are safe and
-follow the OWASP recommendations. Also, Vert.x web got many usability improvements, with a revised OAuth2 setup and a new &lt;code&gt;htdigest&lt;/code&gt; authentication scheme.&lt;/p&gt;
-&lt;p&gt;Devops hasn’t been forgotten with Vert.x Health Check, a key feature in application monitoring.&lt;/p&gt;
-&lt;p&gt;On top of many bug fixes, here is a list of the most important new features you can find in 3.4.0:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Vert.x Infinispan is a new cluster option and supersedes the JGroups option&lt;/li&gt;
-&lt;li&gt;HTTP and Web client redirect handling&lt;/li&gt;
-&lt;li&gt;Zero-config service proxies generation with a &lt;code&gt;processor&lt;/code&gt; classified jar&lt;/li&gt;
-&lt;li&gt;a new &lt;code&gt;SelfSignedCertificate&lt;/code&gt; to make easy to create tests and demos with TLS/SSL&lt;/li&gt;
-&lt;li&gt;Hystrix metrics in the circuit breaker&lt;/li&gt;
-&lt;li&gt;Handlebars templates can now fully resolve properties passed to them&lt;/li&gt;
-&lt;li&gt;JsonObject POJO mapping convenience&lt;/li&gt;
-&lt;li&gt;Http compression level option&lt;/li&gt;
-&lt;li&gt;Groovy support now uses extension methods and does not generate wrappers anymore&lt;/li&gt;
-&lt;li&gt;Dropwizard match metrics can now have an alias&lt;/li&gt;
-&lt;li&gt;RxHelper method for adapting an &lt;code&gt;Observable&lt;/code&gt; to a &lt;code&gt;ReadStream&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;RxHelper method for adpating a &lt;code&gt;Handler&amp;gt;&lt;/code&gt; to a &lt;code&gt;Subscriber&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;provide Alpine and Busybox docker images&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Vert.x 3.4.0 release notes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/wiki/wiki/3.4.0---Release-Notes&quot;&gt;https://github.com/vert-x3/wiki/wiki/3.4.0---Release-Notes&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The event bus client using the SockJS bridge are available from NPM, Bower and as a WebJar:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.npmjs.com/package/vertx3-eventbus-client&quot;&gt;https://www.npmjs.com/package/vertx3-eventbus-client&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/vert-x3/vertx-bus-bower&quot;&gt;https://github.com/vert-x3/vertx-bus-bower&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.webjars.org/&quot;&gt;http://www.webjars.org/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Docker images are also available on the &lt;a href=&quot;https://hub.docker.com/u/vertx/&quot;&gt;Docker Hub&lt;/a&gt;. The Vert.x distribution is also available from &lt;a href=&quot;http://sdkman.io/index.html&quot;&gt;SDKMan&lt;/a&gt; and &lt;a href=&quot;http://brew.sh/&quot;&gt;HomeBrew&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The artifacts have been deployed to &lt;a href=&quot;http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.vertx%22%20AND%20v%3A%223.4.0%22&quot;&gt;Maven Central&lt;/a&gt; and you can get the distribution on &lt;a href=&quot;https://bintray.com/vertx/downloads/distribution/3.4.0/view&quot;&gt;Bintray&lt;/a&gt;.&lt;/p&gt;
-&lt;/article&gt;</description>
-	<pubDate>Tue, 07 Mar 2017 00:00:00 +0000</pubDate>
-</item>
-<item>
-	<title>Eclipse Announcements: Eclipse IoT Day - San Jose 2017</title>
-	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/pHxqyGzF7lU/</guid>
-	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/pHxqyGzF7lU/</link>
-	<description>Seats are filling-up! Register for the Eclipse IoT Day on March 20.&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/pHxqyGzF7lU&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Mon, 06 Mar 2017 11:10:00 +0000</pubDate>
-</item>
-<item>
-	<title>Tom Schindl: e4 on JavaFX with the bnd-maven-plugin (with VS Code)</title>
-	<guid isPermaLink="false">http://tomsondev.bestsolution.at/?p=4994</guid>
-	<link>https://tomsondev.bestsolution.at/2017/03/05/e4-on-javafx-with-the-bnd-maven-plugin-with-vs-code/</link>
-	<description>&lt;p&gt;Just a few minutes ago I blogged about our &lt;a href=&quot;https://tomsondev.bestsolution.at/2017/03/05/efxclipse-and-the-future-of-e4-on-javafx/&quot;&gt;future plans&lt;/a&gt; for &lt;a href=&quot;http://efxclipse.org/&quot;&gt;e(fx)clipse&lt;/a&gt; and to show you that we take the things mentionned there really serious I can provide you an initial report on the first 2 points from the the list:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Freedom of development style&lt;/li&gt;
-&lt;li&gt;Freedom of development tool&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Since its inception the way to develop “e4 on JavaFX” meant:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;useage Eclipse PDE inside your Eclipse IDE&lt;/li&gt;
-&lt;li&gt;useage Maven-Tycho as the headless build system&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;We will start to change that and in the weeks to come!&lt;/strong&gt;&lt;/p&gt;
-&lt;h1&gt;First and most important&lt;/h1&gt;
-&lt;p&gt;We won’t take away ANYTHING – if you want to use PDE and Tycho please do so – we are going to support that development style like did in the past!&lt;/p&gt;
-&lt;h1&gt;The future is pure maven/gradle&lt;/h1&gt;
-&lt;p&gt;I’ve played around a lot in the past weeks with Eclipse, IntelliJ IDEA, Netbeans and VS Code to find what would work out best and I think I’ve reached a point where I can provide you some screenshots and screen casts.&lt;/p&gt;
-&lt;h2&gt;Eclipse&lt;/h2&gt;
-&lt;p&gt;In Eclipse all I need to develop my application is the &lt;a href=&quot;http://www.eclipse.org/m2e&quot;&gt;m2e&lt;/a&gt; extension.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://tomsondev.bestsolution.at/2017/03/05/e4-on-javafx-with-the-bnd-maven-plugin-with-vs-code/screen-maven-pure-eclipse/&quot; rel=&quot;attachment wp-att-4998&quot;&gt;&lt;img alt=&quot;screen-maven-pure-eclipse&quot; class=&quot;alignnone size-full wp-image-4998&quot; height=&quot;368&quot; src=&quot;https://tomsondev.files.wordpress.com/2017/03/screen-maven-pure-eclipse.png?w=640&amp;amp;h=368&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2&gt;VS Code&lt;/h2&gt;
-&lt;p&gt;To give me the extra kick I decided to give VS-Code and the &lt;a href=&quot;https://marketplace.visualstudio.com/items?itemName=redhat.java&quot;&gt;Java-Extension from RedHat&lt;/a&gt; a shot.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h2&gt;The technology&lt;/h2&gt;
-&lt;p&gt;Now that you have looked at the cool screen-cast let’s talk about the boring technology in the backend. We rely on 2 things:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;That we publish the complete e(fx)clipse platform in a &lt;a href=&quot;http://maven.bestsolution.at/&quot;&gt;Maven-Repository&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;The excellent &lt;a href=&quot;http://njbartlett.name/2015/03/27/announcing-bnd-maven-plugin.html&quot;&gt;biz.aQute.bnd/bnd-maven-plugin&lt;/a&gt; part of the &lt;a href=&quot;https://github.com/bndtools/bnd/tree/master/maven/bnd-maven-plugin&quot;&gt;bnd-toolsuite&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/tomsondev.wordpress.com/4994/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/tomsondev.wordpress.com/4994/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=tomsondev.bestsolution.at&amp;amp;blog=7995503&amp;amp;post=4994&amp;amp;subd=tomsondev&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Sun, 05 Mar 2017 20:23:45 +0000</pubDate>
 </item>
 
 </channel>
