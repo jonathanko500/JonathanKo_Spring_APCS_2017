@@ -1,0 +1,93 @@
+package textExcel;
+// Update this file with your own code.
+
+public class Spreadsheet implements Grid{
+
+	private Cell[][]sheet=new Cell[20][12];
+	
+	public Spreadsheet(){
+		for (int k =0;k<sheet.length;k++){//rows
+			for (int h = 0;h<sheet[k].length;h++){//columns
+				sheet[k][h] = new EmptyCell();
+			}
+		}
+	}
+	
+	@Override
+	public String processCommand(String command){
+		String location = command;
+		if (location.equals("")){
+			return "";
+		}
+		if (location.equalsIgnoreCase("clear")){//clears entire spreadsheet
+			for(int i=0;i<sheet.length;i++){
+				for (int j=0;j<sheet[i].length;j++){
+					sheet[i][j] = new EmptyCell();
+				}
+			}
+			return (getGridText());
+		} 
+		if (location.startsWith("clear")){//clear one cell
+			sheet[Integer.parseInt(location.substring(7))-1][location.charAt(6)-65]=new EmptyCell();
+			return getGridText();
+			}
+		if(location.charAt(0)>64&&location.charAt(0)<91){//inspection of cell
+			if(location.indexOf('=')==-1){
+				String cellArea = sheet[Integer.parseInt(location.substring(1))-1][location.charAt(0)-65].fullCellText();
+				return cellArea;
+			}
+			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell
+				if(location.charAt(2)==' ')
+					sheet[Integer.parseInt(location.substring(1,2))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
+				else
+					sheet[Integer.parseInt(location.substring(1,3))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
+				String textInCell = getGridText();
+				return textInCell;
+			}
+		}
+		return "";
+		
+		
+	}
+	@Override
+	public int getRows(){
+		return sheet.length;
+	}
+
+	@Override
+	public int getCols(){
+		return sheet[0].length;
+	}
+
+	@Override
+	public Cell getCell(Location loc){
+		
+		return sheet[loc.getRow()][loc.getCol()];
+	}
+
+	@Override
+	public String getGridText(){
+		String spreadsheet = "";
+		spreadsheet += "    |";
+		char colsStart = 'A';
+		for(int i=0;i<12;i++){//makes the columns
+			spreadsheet += ((char)(colsStart))+ "        |";
+			colsStart +=1;
+		}
+		spreadsheet += "\n";
+		
+		for (int i=0;i<20;i++){
+			if(i<9){
+				spreadsheet += (i+1)+"  |";//single digit row value
+			}else {
+				spreadsheet += (i+1) + " |";//2 digit row value
+			}
+			for(int j = 0; j<12 ; j++){
+				spreadsheet += sheet[i][j].abbreviatedCellText() + "|";
+			}
+			spreadsheet += "    ";
+		}
+		return spreadsheet;
+	}
+
+}

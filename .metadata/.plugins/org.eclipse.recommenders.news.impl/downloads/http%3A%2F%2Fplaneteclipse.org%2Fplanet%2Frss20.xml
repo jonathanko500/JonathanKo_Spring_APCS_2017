@@ -8,6 +8,639 @@
 	<description>Planet Eclipse - http://planeteclipse.org/planet/</description>
 
 <item>
+	<title>Jeremie Bresson: Mylyn Wikitext is available on maven central</title>
+	<guid isPermaLink="true">http://jmini.github.io/blog/2017/2017-03-26_wikitext_on_maven_central.html</guid>
+	<link>http://jmini.github.io/blog/2017/2017-03-26_wikitext_on_maven_central.html</link>
+	<description>&lt;div class=&quot;paragraph&quot;&gt; 
+ &lt;p&gt;As announced in my &lt;a href=&quot;http://jmini.github.io/2017-02-02_wikitext_v3.html&quot;&gt;previous blog post&lt;/a&gt;, important refactorings are going in the mylyn wikitext project. One of the first goals is achieved: the jars are now available on maven central (see also &lt;a href=&quot;http://greensopinion.com/2017/03/06/Mylyn-WikiText-on-Maven-Central.html&quot;&gt;Mylyn WikiText on Maven Central&lt;/a&gt; by David Green). Have a look at the &lt;a href=&quot;https://mvnrepository.com/artifact/org.eclipse.mylyn.docs&quot;&gt;org.eclipse.mylyn.docs group&lt;/a&gt; in a maven central viewer (right now the newest version is &lt;code&gt;3.0.6&lt;/code&gt;).&lt;/p&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;paragraph&quot;&gt; 
+ &lt;p&gt;Wikitext provides the capability to transform from one language to another. I have already blogged about the &lt;a href=&quot;http://jmini.github.io/../2016/2016-12-21_convert_to_asciidoc.html&quot;&gt;possibility to convert to AsciiDoc&lt;/a&gt; from Eclipse IDE (new feature introduced with Oxygen M4).&lt;/p&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;imageblock&quot;&gt; 
+ &lt;div class=&quot;content&quot;&gt; 
+  &lt;img alt=&quot;Convert from textile to AsciiDoc with Eclipse IDE&quot; src=&quot;http://jmini.github.io/blog/2017/2017-03-26_generate-asciidoc.png&quot; /&gt; 
+ &lt;/div&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;paragraph&quot;&gt; 
+ &lt;p&gt;Let demonstrates how you can convert from MediaWiki to AsciiDoc, directly in a small Java program. It is just a few lines of code in a simple main class.&lt;/p&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;imageblock&quot;&gt; 
+ &lt;div class=&quot;content&quot;&gt; 
+  &lt;img alt=&quot;From MediaWiki to Asciidoctor (logos)&quot; src=&quot;http://jmini.github.io/blog/2017/2017-03-26_mediawiki_to_adoc.png&quot; /&gt; 
+ &lt;/div&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;paragraph&quot;&gt; 
+ &lt;p&gt;In the Example the content of the &lt;a href=&quot;http://wiki.eclipse.org/Scout/Contribution&quot;&gt;Scout/Contribution page&lt;/a&gt; taken from the Eclipse wiki will be converted into an AsciiDoc File: &lt;code&gt;scout_contribution.adoc&lt;/code&gt;. The code is straight forward:&lt;/p&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;listingblock&quot;&gt; 
+ &lt;div class=&quot;title&quot;&gt;
+  Listing 1. Example main class
+ &lt;/div&gt; 
+ &lt;div class=&quot;content&quot;&gt; 
+  &lt;pre class=&quot;prettyprint highlight&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;import java.io.File;
+import java.io.StringWriter;
+import java.net.URL;
+
+import org.eclipse.mylyn.wikitext.asciidoc.internal.AsciiDocDocumentBuilder;
+import org.eclipse.mylyn.wikitext.mediawiki.MediaWikiLanguage;
+import org.eclipse.mylyn.wikitext.parser.DocumentBuilder;
+import org.eclipse.mylyn.wikitext.parser.MarkupParser;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+import com.google.common.io.Resources;
+
+public class MediaWikiToAdocExample {
+
+  public static void main(String[] args) throws Exception {
+    String url = &quot;http://wiki.eclipse.org/index.php?title=Scout/Contribution&amp;amp;action=raw&amp;amp;templates=expand&quot;;
+    String input = Resources.toString(new URL(url), Charsets.UTF_8);
+
+    MediaWikiLanguage markupLanguage = new MediaWikiLanguage();
+    markupLanguage.setInternalLinkPattern(&quot;https://wiki.eclipse.org/index.php?title={0}&quot;);
+    MarkupParser parser = new MarkupParser(markupLanguage);
+
+    StringWriter writer = new StringWriter();
+    DocumentBuilder builder = new AsciiDocDocumentBuilder(writer);
+    parser.setBuilder(builder);
+    parser.parse(input);
+
+    String output = &quot;= Eclipse Scout - Contribution\n\n&quot;;
+    output += writer.toString();
+    Files.write(output, new File(&quot;scout_contribution.adoc&quot;), Charsets.UTF_8);
+  }
+}&lt;/code&gt;&lt;/pre&gt; 
+ &lt;/div&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;paragraph&quot;&gt; 
+ &lt;p&gt;On your classpath, you will need some of the wikitext jars and google guava. The &lt;code&gt;pom.xml&lt;/code&gt; File for Maven looks like this:&lt;/p&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;listingblock&quot;&gt; 
+ &lt;div class=&quot;title&quot;&gt;
+  Listing 2. pom.xml for the Example
+ &lt;/div&gt; 
+ &lt;div class=&quot;content&quot;&gt; 
+  &lt;pre class=&quot;prettyprint highlight&quot;&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&amp;gt;
+    &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt;
+
+    &amp;lt;groupId&amp;gt;wikitext.examples&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;mediawiki-to-adoc&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;0.0.1-SNAPSHOT&amp;lt;/version&amp;gt;
+
+    &amp;lt;dependencies&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.eclipse.mylyn.docs&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;org.eclipse.mylyn.wikitext&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.0.6&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.eclipse.mylyn.docs&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;org.eclipse.mylyn.wikitext.mediawiki&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.0.6&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.eclipse.mylyn.docs&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;org.eclipse.mylyn.wikitext.asciidoc&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.0.6&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;com.google.guava&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;guava&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;21.0&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+    &amp;lt;/dependencies&amp;gt;
+
+    &amp;lt;build&amp;gt;
+        &amp;lt;plugins&amp;gt;
+            &amp;lt;plugin&amp;gt;
+                &amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt;
+                &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt;
+                &amp;lt;version&amp;gt;3.6.0&amp;lt;/version&amp;gt;
+                &amp;lt;configuration&amp;gt;
+                    &amp;lt;source&amp;gt;1.8&amp;lt;/source&amp;gt;
+                    &amp;lt;target&amp;gt;1.8&amp;lt;/target&amp;gt;
+                &amp;lt;/configuration&amp;gt;
+            &amp;lt;/plugin&amp;gt;
+        &amp;lt;/plugins&amp;gt;
+    &amp;lt;/build&amp;gt;
+&amp;lt;/project&amp;gt;&lt;/code&gt;&lt;/pre&gt; 
+ &lt;/div&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;paragraph&quot;&gt; 
+ &lt;p&gt;Here is a side by side comparison of the wiki page and of a preview of &lt;code&gt;scout_contribution.adoc&lt;/code&gt;:&lt;/p&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;imageblock&quot;&gt; 
+ &lt;div class=&quot;content&quot;&gt; 
+  &lt;a class=&quot;image&quot; href=&quot;http://jmini.github.io/2017-03-26_mediawiki_and_adoc_preview.png&quot;&gt;&lt;img alt=&quot;2017 03 26 mediawiki and adoc preview 800&quot; src=&quot;http://jmini.github.io/blog/2017/2017-03-26_mediawiki_and_adoc_preview_800.png&quot; /&gt;&lt;/a&gt; 
+ &lt;/div&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;paragraph&quot;&gt; 
+ &lt;p&gt;If you look very closely at this example, you might notice some issues during the conversion process. I have reported them in &lt;a href=&quot;https://bugs.eclipse.org/bugs/show_bug.cgi?id=508262&quot;&gt;Bug 508262&lt;/a&gt;.&lt;/p&gt; 
+&lt;/div&gt; 
+&lt;div class=&quot;paragraph&quot;&gt; 
+ &lt;p&gt;If you are interessted by the Mylyn Wikitext project, you can follow &lt;a href=&quot;https://twitter.com/WikiText&quot;&gt;@WikiText&lt;/a&gt; on twitter. You can ask questions on StackOverflow using the &lt;a href=&quot;http://stackoverflow.com/questions/tagged/mylyn-wikitext&quot;&gt;mylyn-wikitext&lt;/a&gt; tag. Are you looking for more usage examples of Mylyn Wikitext? Have a look at &lt;a href=&quot;https://github.com/greensopinion/wikitext-examples&quot;&gt;greensopinion/wikitext-examples&lt;/a&gt; on GitHub. David Green has prepared additional use cases there.&lt;/p&gt; 
+&lt;/div&gt;</description>
+	<pubDate>Sat, 25 Mar 2017 23:00:00 +0000</pubDate>
+</item>
+<item>
+	<title>Paolo Patierno: A new “Kafka” novel : the OpenShift &amp; Kubernetes deployment</title>
+	<guid isPermaLink="false">http://paolopatierno.wordpress.com/?p=4198</guid>
+	<link>https://paolopatierno.wordpress.com/2017/03/25/a-new-kafka-novel-the-openshift-kubernetes-deployment/</link>
+	<description>&lt;p style=&quot;text-align: justify;&quot;&gt;This blog post doesn’t want to be an exhaustive tutorial to describe the way to go for having &lt;strong&gt;&lt;a href=&quot;https://kafka.apache.org/&quot; target=&quot;_blank&quot;&gt;Apache Kafka&lt;/a&gt;&lt;/strong&gt; deployed in an &lt;strong&gt;&lt;a href=&quot;https://www.openshift.com/&quot; target=&quot;_blank&quot;&gt;OpenShift&lt;/a&gt;&lt;/strong&gt; or &lt;strong&gt;&lt;a href=&quot;https://kubernetes.io/&quot; target=&quot;_blank&quot;&gt;Kubernetes&lt;/a&gt;&lt;/strong&gt; cluster but just the story of my journey for having a “working” deployment and using it as a starting point to improve over time with a daily basis work in progress. This journey started using Apache Kafka 0.8.0, went through 0.9.0, finally reaching the nowadays 0.10.1.0 version.&lt;/p&gt;
+&lt;h1 style=&quot;text-align: justify;&quot;&gt;From “stateless” to “stateful”&lt;/h1&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;One of the main reasons to use a platform like OpenShift/Kubernetes (let me to use OS/K8S from now) is the scalability feature we can have for our deployed applications. With “stateless” applications there are not so much problems to use such a platform for a Cloud deployment; every time an application instance crashes or needs to be restarted (and/or relocated to a different node), just spin up a new instance without any relationship with the previous one and your deployment will continue to work properly as before. There is no need for the new instance to have information or state related to the previous one.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;It’s also true that, out there, we have a lot of different applications which need to persist state information if something goes wrong in the Cloud and they need to be restarted. Such applications are “stateful” by nature and their “story” is important so that just spinning up a new instance isn’t enough.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;The main challenges we have with OS/K8S platform are :&lt;/p&gt;
+&lt;ul style=&quot;text-align: justify;&quot;&gt;
+&lt;li&gt;pods are &lt;strong&gt;scaled out and scaled in&lt;/strong&gt; through Replica Sets (or using Deployment object)&lt;/li&gt;
+&lt;li&gt;pods will be assigned an &lt;strong&gt;arbitrary name&lt;/strong&gt; at runtime&lt;/li&gt;
+&lt;li&gt;pods &lt;strong&gt;may be restarted and relocated&lt;/strong&gt; (on a different node) at any point in time&lt;/li&gt;
+&lt;li&gt;pods may &lt;strong&gt;never be referenced directly by the name or IP address&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;a service &lt;strong&gt;selects a set of pods&lt;/strong&gt; that match specific criterion and &lt;strong&gt;exposes them&lt;/strong&gt; through a well-defined endpoint&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;All the above considerations aren’t a problem for “stateless” applications but they are for “stateful” ones.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;The difference between them is also know as &lt;strong&gt;“Pets vs Cattle”&lt;/strong&gt; meme, where “stateless” applications are just a herd of cattle and when one of them die, you can just replace it with a new one having same characteristics but not exactly the same (of course !); the “stateful” applications are like pets, you have to take care of them and you can’t just replace a pet if it’s die &lt;img alt=&quot;😦&quot; class=&quot;wp-smiley&quot; src=&quot;https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/1f626.png&quot; style=&quot;height: 1em;&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Just as reference you can read about the history of “Pets vs Cattle” in this &lt;a href=&quot;http://cloudscaling.com/blog/cloud-computing/the-history-of-pets-vs-cattle/&quot; target=&quot;_blank&quot;&gt;article&lt;/a&gt;.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Apache Kafka is one of these type of applications … it’s a pet … which needs to be handle with care. Today, we know that OS/K8S offers &lt;strong&gt;Stateful Sets&lt;/strong&gt; (previously known as &lt;strong&gt;Pet Sets&lt;/strong&gt; … for clear reasons!) that can be used in this scenario but I started this journey when they didn’t exist (or not released yet), so I’d like to share with you my story, the main problems I encountered and how I solved them (you’ll see that I have “emulated” something that Stateful Sets offer today out of box).&lt;/p&gt;
+&lt;h1 style=&quot;text-align: justify;&quot;&gt;Let’s start with a simple architecture&lt;/h1&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Let’s start in a very simple way using a Replica Set (only one replica) for Zookeeper server and the related service and a Replica Set (with three replicas) for Kafka servers and the related service.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;reference_architecture_1st_ver&quot; class=&quot;alignnone size-full wp-image-4245&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/reference_architecture_1st_ver-e1490443315718.png?w=620&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;The Kafka Replica Set has three replicas for “quorum” and leader election (even for topic replication). The Kafka service is needed to expose Kafka servers access even to clients. Each Kafka server may need :&lt;/p&gt;
+&lt;ul style=&quot;text-align: justify;&quot;&gt;
+&lt;li&gt;unique ID (for Zookeeper)&lt;/li&gt;
+&lt;li&gt;advertised host/port (for clients)&lt;/li&gt;
+&lt;li&gt;logs directory (for storing topic partitions)&lt;/li&gt;
+&lt;li&gt;Zookeeper info (for connection)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;The first approach is to use the broker id dynamic generation so that when a Kafka server starts and needs to connect to Zookeeper, a new broker id is generated and assigned to it. The advertised host/port are just container IP and the fixed 9092 port while the logs directory is predefined (by configuration file). Finally, the Zookeeper connection info are provided through the related Zookeeper service using the related environment variables that OS/K8S creates for us (ZOOKEEPER_SERVICE_HOST and ZOOKEEPER_SERVICE_PORT).&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Let’s consider the following use case with a topic (1 partition and 3 replicas). The initial situation is having Kafka servers with broker id 1001, 1002, 1003 and the topic with current state :&lt;/p&gt;
+&lt;ul style=&quot;text-align: justify;&quot;&gt;
+&lt;li&gt;leader : 1001&lt;/li&gt;
+&lt;li&gt;replicas : 1001, 1002, 1003&lt;/li&gt;
+&lt;li&gt;ISR : 1001, 1002, 1003&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;It means that clients need to connect to 1001 for sending/receiving messages for the topic and that 1002 and 1003 are followers for having this topic replicated handling failures.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Now, imagine that the Kafka server 1003 crashes and a new instance is just started. The topic description becomes :&lt;/p&gt;
+&lt;ul style=&quot;text-align: justify;&quot;&gt;
+&lt;li&gt;leader : 1001&lt;/li&gt;
+&lt;li&gt;replicas : 1001, 1002, 1003 &lt;strong&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;&amp;lt;– it’s still here !&lt;/span&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;ISR  : 1001, 1002 &lt;strong&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;&amp;lt;– that’s right, 1003 is not “in-sync”&lt;/span&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Zookeeper still sees the broker 1003 as a host for one of the topic replicas but not “in-sync” with the others. Meantime, the new started Kafka server has a new auto generated id 1004. A manual script execution (through the &lt;em&gt;kafka-preferred-replica-election.sh&lt;/em&gt;) is needed in order to :&lt;/p&gt;
+&lt;ul style=&quot;text-align: justify;&quot;&gt;
+&lt;li&gt;adding 1004 to the replicas&lt;/li&gt;
+&lt;li&gt;removing 1003 from replicas&lt;/li&gt;
+&lt;li&gt;new leader election for replicas&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;use_case_autogenerated_id.png&quot; class=&quot;alignnone size-full wp-image-4267&quot; height=&quot;417&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/use_case_autogenerated_id-e1490444223796.png?w=608&quot; width=&quot;608&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;So what does it mean ?&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;First of all, the new Kafka server instance needs to have the same id of the previous one and, of course, the same data so the partition replica of the topic. For this purpose, a persistent volume can be the solution used, through a claim, by the Replica Set for storing the logs directory for all the Kafka servers (i.e. /kafka-logs-&amp;lt;broker-id&amp;gt;). It’s important to know that, by Kafka design, a logs directory has a “lock” file locked by the server owner.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;For searching for the “next” broker id to use, avoiding the auto-generation and getting the same data (logs directory) as the previous one, a script (in my case a Python one) can be used on container startup before launching the related Kafka server.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;In particular, the script :&lt;/p&gt;
+&lt;ul style=&quot;text-align: justify;&quot;&gt;
+&lt;li&gt;searches for a free “lock” file in order to reuse the broker id for the new Kafka server instance …&lt;/li&gt;
+&lt;li&gt;… otherwise a new broker id is used and a new logs directory is created&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Using this approach, we obtain the following result for the previous use case :&lt;/p&gt;
+&lt;ul style=&quot;text-align: justify;&quot;&gt;
+&lt;li style=&quot;text-align: justify;&quot;&gt;the new started Kafka server instance acquires the broker id 1003 (as the previous one)&lt;/li&gt;
+&lt;li style=&quot;text-align: justify;&quot;&gt;it’s just automatically part of the replicas and ISR&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;use_case_locked_id&quot; class=&quot;alignnone size-full wp-image-4282&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/use_case_locked_id-e1490446920141.png?w=620&quot; /&gt;&lt;/p&gt;
+&lt;h1 style=&quot;text-align: justify;&quot;&gt;But … what on Zookeeper side ?&lt;/h1&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;In this deployment, the Zookeeper Replica Set has only one replica and the service is needed to allow connections from the Kafka servers. What happens if the Zookeeper crashes (application or node fails) ? The OS/K8S platform just restarts a new instance (not necessary on the same node) but what I see is that the currently running Kafka servers can’t connect to the new Zookeeper instance even if it holds the same IP address (through the service usage). The Zookeeper server closes the connections after an initial handshake, probably related to some Kafka servers information that Zookeeper stores locally. Restarting a new instance, this information are lost !&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Even in this case, using a persistent volume for the Zookeeper Replica Set is a solution. It’s used for storing the data directory that will be the same for each instance restarted; the new instance just finds Kafka servers information in the volume and grants connections to them.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;reference_architecture_1st_ver_zookeeper&quot; class=&quot;alignnone size-full wp-image-4408&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/reference_architecture_1st_ver_zookeeper1-e1490452106786.png?w=620&quot; /&gt;&lt;/p&gt;
+&lt;h1 style=&quot;text-align: justify;&quot;&gt;When the Stateful Sets were born !&lt;/h1&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;At some point (from the 1.5 Kubernetes release), the OS/K8S platform started to offer the Pet Sets then renamed in Stateful Sets like a sort of Replica Sets but for “stateful” application but … what they offer ?&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;First of all, each “pet” has a stable hostname that is always resolved by DNS. Each “pet” is being assigned a name with an ordinal index number (i.e. kafka-0, kafka-1, …) and finally a stable storage is linked to that hostname/ordinal index number.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;It means that every time a “pet” crashes and it’s restarted, the new one will be the same : same hostname, same name with ordinal index number and same attached storage. The previous running situation is fully recovered and the new instance is exactly the same as the previous one. You could see them as something that I tried to emulate with my scripts on container startup.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;So today, my current Kafka servers deployment has :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li style=&quot;text-align: justify;&quot;&gt;a Stateful set with three replicas for Kafka servers&lt;/li&gt;
+&lt;li style=&quot;text-align: justify;&quot;&gt;an “headless” service (so without an assigned cluster IP) that is needed for having Stateful set working (so for DNS hostname resolution)&lt;/li&gt;
+&lt;li style=&quot;text-align: justify;&quot;&gt;a “regular” service for providing access to the Kafka servers from clients&lt;/li&gt;
+&lt;li style=&quot;text-align: justify;&quot;&gt;one persistent volume for each Kafka server with a claim template defined in the Stateful set declaration&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt=&quot;reference_architecture_statefulsets&quot; class=&quot;alignnone size-full wp-image-4359&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/reference_architecture_statefulsets-e1490450125965.png?w=620&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Other then to use a better implementation &lt;img alt=&quot;🙂&quot; class=&quot;wp-smiley&quot; src=&quot;https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/1f642.png&quot; style=&quot;height: 1em;&quot; /&gt; … the current solution doesn’t use a single persistent volume for all the Kafka servers (having a logs directory for each of them) but it’s preferred to use a persistent storage dedicated to only one “pet”.&lt;/p&gt;
+&lt;h1 style=&quot;text-align: justify;&quot;&gt;It’s great to read about it but … I want to try … I want to play !&lt;/h1&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;You’re right, I told you my journey that isn’t finished yet but you would like to try … to play with some stuff for having Apache Kafka deployed on OS/K8S.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;I called this project &lt;strong&gt;&lt;a href=&quot;https://github.com/EnMasseProject/barnabas&quot; target=&quot;_blank&quot;&gt;Barnabas&lt;/a&gt;&lt;/strong&gt; like one of the main characters of the author Franz Kafka who was a … messenger in &lt;a href=&quot;https://en.wikipedia.org/wiki/The_Castle_(novel)&quot; target=&quot;_blank&quot;&gt;“The Castel”&lt;/a&gt; novel :-). It’s part of the bigger &lt;strong&gt;&lt;a href=&quot;https://github.com/EnMasseProject&quot; target=&quot;_blank&quot;&gt;EnMasse&lt;/a&gt;&lt;/strong&gt; project which provides a scalable messaging as a service (MaaS) infrastructure running on OS/K8S.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;The repo provides different deployment types : from the “handmade” solution (based on bash and Python scripts) to the current Stateful Sets solution that I’ll improve in the coming weeks.&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;The great thing about that (in the context of the overall EnMasse project) is that today I’m able to use &lt;strong&gt;standard protocols&lt;/strong&gt; like AMQP and MQTT to communicate with an Apache Kafka cluster (using an &lt;a href=&quot;https://github.com/EnMasseProject/amqp-kafka-bridge&quot; target=&quot;_blank&quot;&gt;AMQP bridge&lt;/a&gt; and an &lt;a href=&quot;https://github.com/EnMasseProject/mqtt-gateway&quot; target=&quot;_blank&quot;&gt;MQTT gateway&lt;/a&gt;) for all the use cases where using Kafka makes sense against traditional messaging brokers … that from their side have to tell about a lot of stories and different scenarios &lt;img alt=&quot;😉&quot; class=&quot;wp-smiley&quot; src=&quot;https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/1f609.png&quot; style=&quot;height: 1em;&quot; /&gt;&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;Do you want to know more about that ? The &lt;strong&gt;&lt;a href=&quot;https://www.redhat.com/en/summit/2017&quot; target=&quot;_blank&quot;&gt;Red Hat Summit 2017&lt;/a&gt;&lt;/strong&gt; (Boston, May 2-4) could be a good place, where me and &lt;a href=&quot;https://twitter.com/christianposta&quot; target=&quot;_blank&quot;&gt;Christian Posta&lt;/a&gt; (Principal Architect, Red Hat) will have the session &lt;a href=&quot;https://rh2017.smarteventscloud.com/connect/search.ww#loadSearch-searchPhrase=kafka&amp;amp;searchType=session&amp;amp;tc=0&amp;amp;sortBy=abbreviationSort&amp;amp;p=&amp;amp;value(otherSpecifyValue_82920)=%3Fsc_cid&quot; target=&quot;_blank&quot;&gt;“Red Hat JBoss A-MQ and Apache Kafka : which to use ?”&lt;/a&gt; … so what are you waiting for ? See you there !&lt;/p&gt;
+&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/paolopatierno.wordpress.com/4198/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/paolopatierno.wordpress.com/4198/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=paolopatierno.wordpress.com&amp;amp;blog=15467422&amp;amp;post=4198&amp;amp;subd=paolopatierno&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;&lt;/p&gt;</description>
+	<pubDate>Sat, 25 Mar 2017 14:26:35 +0000</pubDate>
+</item>
+<item>
+	<title>Maximilian and Jonas: EMF Forms and EMF Client Platform 1.12.0 released!</title>
+	<guid isPermaLink="false">http://eclipsesource.com/blogs/?p=27899</guid>
+	<link>http://eclipsesource.com/blogs/2017/03/24/emf-forms-and-emf-client-platform-1-12-0-released/</link>
+	<description>&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;We are happy to announce that together with Neon.3, we have released  &lt;/span&gt;&lt;a href=&quot;http://eclipse.org/ecp/emfforms&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;EMF Forms&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt; and &lt;/span&gt;&lt;a href=&quot;http://eclipse.org/ecp&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;EMF Client Platform&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt; 1.12.0! &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;We want to thank our continuously active team of &lt;/span&gt;&lt;b&gt;12 contributors &lt;/b&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;(&lt;/span&gt;&lt;b&gt;36 contributors&lt;/b&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt; over all) for woking on &lt;/span&gt;&lt;a href=&quot;https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=UNCONFIRMED&amp;amp;bug_status=NEW&amp;amp;bug_status=ASSIGNED&amp;amp;bug_status=REOPENED&amp;amp;bug_status=RESOLVED&amp;amp;bug_status=VERIFIED&amp;amp;bug_status=CLOSED&amp;amp;classification=Modeling&amp;amp;component=Common&amp;amp;component=Editor&amp;amp;component=EMF%20Forms&amp;amp;component=Model%20Workspace&amp;amp;component=Navigator&amp;amp;component=Validation&amp;amp;list_id=15869873&amp;amp;product=ECP&amp;amp;query_format=advanced&amp;amp;target_milestone=1.12.0&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;25 bug reports and feature requests&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;. As the list reveals, and due to the short development cycle between Neon.2 and Neon.3, the 1.12.0 release was mainly focussed on bug fixes. The subsequent release will introduce a number of new features again, which are already in the pipeline.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;We will give a &lt;/span&gt;&lt;a href=&quot;https://www.eclipseconverge.org/na2017/session/emf-forms-past-present-and-features&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;talk&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt; at &lt;/span&gt;&lt;a href=&quot;https://www.eclipseconverge.org/na2017/&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Eclipse Converge 2017&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt; also introducing the new features of the latest releases, so make sure &lt;/span&gt;&lt;a href=&quot;https://www.eclipseconverge.org/na2017/registration&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;you register soon&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Please note, that we have began work on EMF Forms / ECP 2.0.0 in parallel to the 1.x development stream. We plan a final 1.x release along with Oxygen (1.13.0). Afterwards, we plan to focus on the 2.0.0 release stream. However, users do not have to worry too much about API breaks. There are two major changes that we wish to apply with 2.0.0. First, we plan to remove API, which is already marked as deprecated. So, if you still use any deprecated API, now is a good time to start refactoring here. Second, we will refactor the way “domain model references” are stored in the model. This will mainly allow us to bind to new data models. For this change, we plan to provide a migration for existing view models, so this change should be seamless for users of the framework.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;As always, we will also blog about new features of the EMF Forms / ECP 1.12.0 release in the upcoming weeks! Please follow this blog or follow us on twitter to get notified about the new posts.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;In case you don’t know EMF Forms: It is a framework focused on the creation of form-based UIs. EMF Client Platform is designed to support the development of applications based on an EMF data model. If you are not yet familiar with EMF Forms, please refer to &lt;/span&gt;&lt;a href=&quot;http://eclipsesource.com/blogs/tutorials/getting-started-with-EMF-Forms/&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;this tutorial&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt; for a introduction.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Both of these frameworks are part of Eclipse Modeling Tools Neon.3, but you can also find the new release on our download pages:&lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li style=&quot;font-weight: 400;&quot;&gt;&lt;a href=&quot;http://eclipse.org/ecp/download.html&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Download EMF Client Platform&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li style=&quot;font-weight: 400;&quot;&gt;&lt;a href=&quot;http://eclipse.org/ecp/emfforms/download.html&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Download EMF Forms&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;&lt;div style=&quot;display: inline-block;&quot;&gt;&lt;a href=&quot;https://twitter.com/intent/tweet?source=webclient&amp;amp;text=EMF+Forms+and+EMF+Client+Platform+1.12.0+released%21&amp;amp;via=eclipsesource&amp;amp;url=http://eclipsesource.com/blogs/2017/03/24/emf-forms-and-emf-client-platform-1-12-0-released/&quot; style=&quot;margin-right: 5px;&quot; target=&quot;_blank&quot; title=&quot;Share on Twitter&quot;&gt;&lt;img alt=&quot;Twitter&quot; src=&quot;http://eclipsesource.com/blogs/wp-content/plugins/custom-about-author/images/social_media/twitter.png&quot; title=&quot;Twitter&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;https://plus.google.com/share?url=http://eclipsesource.com/blogs/2017/03/24/emf-forms-and-emf-client-platform-1-12-0-released/&quot; style=&quot;margin-right: 5px;&quot; target=&quot;_blank&quot; title=&quot;+1&quot;&gt;&lt;img alt=&quot;Google+&quot; src=&quot;http://eclipsesource.com/blogs/wp-content/plugins/custom-about-author/images/social_media/google_plus.png&quot; title=&quot;Google+&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;http://www.linkedin.com/cws/share?url=http://eclipsesource.com/blogs/2017/03/24/emf-forms-and-emf-client-platform-1-12-0-released/&quot; style=&quot;margin-right: 5px;&quot; target=&quot;_blank&quot; title=&quot;Share on LinkedIn&quot;&gt;&lt;img alt=&quot;LinkedIn&quot; src=&quot;http://eclipsesource.com/blogs/wp-content/plugins/custom-about-author/images/social_media/linkedin.png&quot; title=&quot;LinkedIn&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;https://www.facebook.com/sharer/sharer.php?u=http://eclipsesource.com/blogs/2017/03/24/emf-forms-and-emf-client-platform-1-12-0-released/&amp;amp;t=EMF+Forms+and+EMF+Client+Platform+1.12.0+released%21&quot; style=&quot;margin-right: 5px;&quot; target=&quot;_blank&quot; title=&quot;Facebook&quot;&gt;&lt;img alt=&quot;Facebook&quot; src=&quot;http://eclipsesource.com/blogs/wp-content/plugins/custom-about-author/images/social_media/facebook.png&quot; title=&quot;Facebook&quot; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;&lt;a href=&quot;http://eclipsesource.com/blogs/2017/03/24/emf-forms-and-emf-client-platform-1-12-0-released/#respond&quot;&gt;Leave a Comment&lt;/a&gt;. Tagged with &lt;a href=&quot;http://eclipsesource.com/blogs/tag/eclipse/&quot; title=&quot;eclipse Tag&quot;&gt;eclipse&lt;/a&gt;, &lt;a href=&quot;http://eclipsesource.com/blogs/tag/emf/&quot; title=&quot;emf Tag&quot;&gt;emf&lt;/a&gt;, &lt;a href=&quot;http://eclipsesource.com/blogs/tag/emfcp/&quot; title=&quot;emfcp Tag&quot;&gt;emfcp&lt;/a&gt;, &lt;a href=&quot;http://eclipsesource.com/blogs/tag/emfforms/&quot; title=&quot;emfforms Tag&quot;&gt;emfforms&lt;/a&gt;, &lt;a href=&quot;http://eclipsesource.com/blogs/tag/eclipse/&quot; title=&quot;eclipse Tag&quot;&gt;eclipse&lt;/a&gt;, &lt;a href=&quot;http://eclipsesource.com/blogs/tag/emf/&quot; title=&quot;emf Tag&quot;&gt;emf&lt;/a&gt;, &lt;a href=&quot;http://eclipsesource.com/blogs/tag/emfcp/&quot; title=&quot;emfcp Tag&quot;&gt;emfcp&lt;/a&gt;, &lt;a href=&quot;http://eclipsesource.com/blogs/tag/emfforms/&quot; title=&quot;emfforms Tag&quot;&gt;emfforms&lt;/a&gt;&lt;p&gt;&lt;/p&gt;</description>
+	<pubDate>Fri, 24 Mar 2017 15:04:20 +0000</pubDate>
+</item>
+<item>
+	<title>PapyrusUML: Papyrus-RT 0.9 is available!</title>
+	<guid isPermaLink="false">http://papyrusuml.wordpress.com/?p=579</guid>
+	<link>https://papyrusuml.wordpress.com/2017/03/24/papyrus-rt-0-9-is-available/</link>
+	<description>&lt;p&gt;As I mentioned in a &lt;a href=&quot;https://papyrusuml.wordpress.com/2017/03/09/papyrus-rt-beta/&quot; target=&quot;_blank&quot;&gt;previous post&lt;/a&gt;, Papyrus for Real Time v0.9 is now available for &lt;a href=&quot;https://eclipse.org/papyrus-rt/content/download.php&quot; target=&quot;_blank&quot;&gt;download&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;And yes, there is a Beta associated with it…but my minions tell me it is still being setup. I’ve been told something will be announced about this next week, and if you are interested in participating, you can just let me know either in comments on this blog or through &lt;a href=&quot;https://twitter.com/PapyrusUML&quot; target=&quot;_blank&quot;&gt;Twitter&lt;/a&gt; &lt;a href=&quot;https://twitter.com/PapyrusUML&quot; target=&quot;_blank&quot;&gt;@PapyrusUML&lt;/a&gt;. I’ll then let my minions know!&lt;/p&gt;
+&lt;p&gt;Are you curious about this release? Then have a look at the &lt;a href=&quot;https://wiki.eclipse.org/Papyrus-RT/Releases/Neon_v0.9_Release_Notes&quot; target=&quot;_blank&quot;&gt;Release Notes&lt;/a&gt;.&lt;/p&gt;&lt;br /&gt;Filed under: &lt;a href=&quot;https://papyrusuml.wordpress.com/category/news/&quot;&gt;News&lt;/a&gt;, &lt;a href=&quot;https://papyrusuml.wordpress.com/category/papyrus-rt/&quot;&gt;Papyrus-RT&lt;/a&gt; Tagged: &lt;a href=&quot;https://papyrusuml.wordpress.com/tag/release/&quot;&gt;release&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/papyrusuml.wordpress.com/579/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/papyrusuml.wordpress.com/579/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/godelicious/papyrusuml.wordpress.com/579/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/delicious/papyrusuml.wordpress.com/579/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gofacebook/papyrusuml.wordpress.com/579/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/facebook/papyrusuml.wordpress.com/579/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gotwitter/papyrusuml.wordpress.com/579/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/twitter/papyrusuml.wordpress.com/579/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gostumble/papyrusuml.wordpress.com/579/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/stumble/papyrusuml.wordpress.com/579/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/godigg/papyrusuml.wordpress.com/579/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/digg/papyrusuml.wordpress.com/579/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/goreddit/papyrusuml.wordpress.com/579/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/reddit/papyrusuml.wordpress.com/579/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=papyrusuml.wordpress.com&amp;amp;blog=72365150&amp;amp;post=579&amp;amp;subd=papyrusuml&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Fri, 24 Mar 2017 13:47:27 +0000</pubDate>
+</item>
+<item>
+	<title>Tom Schindl: e(fx)clipse runtime library – Working with the (JavaFX) UI-Thread</title>
+	<guid isPermaLink="false">http://tomsondev.bestsolution.at/?p=5012</guid>
+	<link>https://tomsondev.bestsolution.at/2017/03/23/efxclipse-runtime-library-working-with-the-javafx-ui-thread/</link>
+	<description>&lt;p&gt;When developing UI-Application a very frequent task is&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;to synchronizes yourself back from an worker-thread to the UI-Thread&lt;/li&gt;
+&lt;li&gt;schedule task to run in the future&lt;/li&gt;
+&lt;li&gt;Block the program flow and wait for a condition being met (in SWT called spinning the event loop)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;JavaFX 8 has a public API for most of those building blocks (only exception is Event-Loop-Spinning who was an internal API in Java8 and is public API in 9) but using higher level API reduces the boilerplate code you need to implement.&lt;/p&gt;
+&lt;p&gt;Before we start let’s see how you can access to it in your maven-driven projects (I’m not gradle safey enough to show how it works there) you need to &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;add the &lt;a href=&quot;http://maven.bestsolution.at/&quot;&gt;efxclipse&lt;/a&gt; maven repository (at the time of this writing you need to nightly repository because you need at least 3.0.0)&lt;/li&gt;
+&lt;li&gt;add the following dependency
+&lt;pre class=&quot;brush: xml; title: ; notranslate&quot;&gt;&amp;lt;dependency&amp;gt;
+  &amp;lt;groupId&amp;gt;at.bestsolution.efxclipse.rt&amp;lt;/groupId&amp;gt;
+  &amp;lt;artifactId&amp;gt;org.eclipse.fx.ui.controls&amp;lt;/artifactId&amp;gt;
+  &amp;lt;version&amp;gt;3.0.0-SNAPSHOT&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let’s take a look at some of those APIs and how they can help you write better code:&lt;/p&gt;
+&lt;h2&gt;Writing back from worker thread&lt;/h2&gt;
+&lt;p&gt;Let’s suppose we have a service who returns a search result as a &lt;code&gt;CompletableFuture&lt;/code&gt; and we want to push the result – once available – to JavaFX ObjectProperty:&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;import org.eclipse.fx.core.ServiceUtils;
+
+// Lookup the domain service in the service registry
+PersonSearchService service = 
+  ServiceUtils.getService(PersonSearchService.class);
+
+ObjectProperty&amp;lt;Person&amp;gt; person = ...;
+
+CompletableFuture&amp;lt;Person&amp;gt; result = 
+  service.findByName(&quot;Tom&quot;,&quot;Schindl&quot;);
+&lt;/pre&gt;
+&lt;p&gt;Let’s for a second suppose we can interact with our UI-Toolkit on ANY-Thread we could simply write:&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;result.thenAccept( person::set );
+&lt;/pre&gt;
+&lt;p&gt;Unfortunately none of the UI-Toolkits I know would support this because they require you to sync on a special thread called the UI-Thread. JavaFX is not different in this aspect.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Plain JavaFX APIs:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;result.thenAccept( p -&amp;gt; {
+   Platform.runLater( () -&amp;gt;
+     person.set(p);
+   );
+} );
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Using e(fx)clipse’ &lt;code&gt;ThreadSynchronize#asyncExec(T,Consumer&amp;lt;T&amp;gt;)&lt;/code&gt;:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;import org.eclipse.fx.core.ThreadSynchronize;
+
+// ...
+
+// Lookup the thready service in the service registry
+ThreadSynchronize threadSync = 
+  ServiceUtils.getService(ThreadSynchronize.class).get();
+
+result.thenAccept( p -&amp;gt; {
+   threadSync.asyncExec( p, person::set );
+});
+&lt;/pre&gt;
+&lt;p&gt;We got rid of the inner lambda and replaced it with a method reference, so the code got more readable but&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Using e(fx)clipse’ &lt;code&gt;ThreadSynchronize#wrap(Consumer&amp;lt;T&amp;gt;)&lt;/code&gt;:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;// ...
+result.thenAccept( threadSync.wrap(person::set) );
+&lt;/pre&gt;
+&lt;p&gt;we can get rid of all outer lambda as well and are back to fairly the same code as if we’d not had to worry about thread-synchronization at all.&lt;/p&gt;
+&lt;h2&gt;Reading from a worker thread&lt;/h2&gt;
+&lt;p&gt;Let’s suppose you have a Timer running who wants to read a JavaFX-Property from a TextField in 1 second from now you’d:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You’d better rewrite it to use a Timeline so that no thread sync is needed&lt;/li&gt;
+&lt;li&gt;You’d write the following magic lines of code:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;TextField textField = ...
+
+Timer t = new Timer();
+t.schedule( new TimerTask() {
+  @Override
+  public void run() {
+    CountDownLatch ll = new CountDownLatch(1);
+    AtomicReference&amp;lt;String&amp;gt; data = new AtomicReference&amp;lt;&amp;gt;();
+    Platform.runLater( () -&amp;gt; {
+      data.set( textField.getText() );
+      ll.countDown();
+    });
+    ll.await();
+    String d = data.get();
+    // further process the data 
+  }
+}, 1000 );
+&lt;/pre&gt;
+&lt;p&gt;Let’s for a moment forget that this code fairly dangerous because it might create a dead lock situation (hence JavaFX only provides &lt;code&gt;Platform.runLater(Runnable)&lt;/code&gt;) this is a huge amount of code to write! Let’s see what APIs e(fx)clipse has to improve the situation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Using &lt;code&gt;ThreadSynchronize#syncExec(Runnable)&lt;/code&gt;:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;ThreadSynchronize threadSync = 
+  ServiceUtils.getService(ThreadSynchronize.class).get();
+
+public void run() {
+  AtomicReference&amp;lt;String&amp;gt; data = new AtomicReference&amp;lt;&amp;gt;();
+  threadSync.syncExec( () -&amp;gt; {
+    data.set( textField.getText() );
+  } );
+  String d = data.get();
+  // further process the data 
+}
+&lt;/pre&gt;
+&lt;p&gt;Removes the need for the &lt;code&gt;CountDownLatch&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Using &lt;code&gt;ThreadSynchronize#syncExec(Callable&amp;lt;V&amp;gt;, V)&lt;/code&gt;:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;public void run() {
+  String d = threadSync.syncExec( textField::getText, &quot;&quot; );
+}
+&lt;/pre&gt;
+&lt;p&gt;Removes the need for the &lt;code&gt;AtomicReference&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Using &lt;code&gt;ThreadSynchronize#scheduleExecution(long, Runnable)&lt;/code&gt;:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;ExecutorService s = ...;
+threadSync.scheduleExecution( 1000, () -&amp;gt; {
+   String data = textField.getText();
+   s.submit( () -&amp;gt; ... );
+} );
+&lt;/pre&gt;
+&lt;p&gt;Removes the thread synchronization problems arising from &lt;code&gt;Platform.runLater()&lt;/code&gt; call&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Using &lt;code&gt;ThreadSynchronize#scheduleExecution(long, Callable&amp;lt;T&amp;gt;) : CompletableFuture&amp;lt;T&amp;gt; &lt;/code&gt;:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;threadSync.scheduleExecution( 1000, textField::getText )
+  .thenAcceptAsync( d -&amp;gt; ... );
+&lt;/pre&gt;
+&lt;p&gt;Removes the lambda and gets you to the wonderful &lt;code&gt;CompletableFuture&lt;/code&gt;-API.&lt;/p&gt;
+&lt;h2&gt;Block program flow&lt;/h2&gt;
+&lt;p&gt;Generally speaking halting the program flow is a discouraged software pattern and you’d better work with &lt;code&gt;Future&lt;/code&gt; and callbacks like &lt;code&gt;Consumer&lt;/code&gt; but there might be (existing) API you have to support who requires you to halt the program flow and continue after a certain condition has been met.&lt;/p&gt;
+&lt;p&gt;To support such a usecase e(fx)clipse has &lt;code&gt;org.eclipse.fx.ui.controls.Util#waitUntil( BlockCondition blockCondition )&lt;/code&gt; you can use like this&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;Pane p = ...;
+
+// Ask for name in an overlay
+String askForName() {
+  BlockCondition&amp;lt;String&amp;gt; condition = new BlockCondition&amp;lt;&amp;gt;();
+
+  TextField t = new TextField();
+  Button b = new Button(&quot;Proceed&quot;);
+  b.setOnAction( e -&amp;gt; { condition.release(t.getText()); } );
+  HBox box = new HBox(
+    new Label(&quot;Name:&quot;),
+    t,
+    b);
+  box.setManaged(false);
+  box.autosize();
+  box.relocate( 
+    p.getWidth() / 2 - box.getWidth() / 2, 
+    p.getHeight() / 2 - box.getHeight() / 2 );
+  p.getChildren().add( box );
+  return Util.waitUntil( condition );
+}
+&lt;/pre&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/tomsondev.wordpress.com/5012/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/tomsondev.wordpress.com/5012/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=tomsondev.bestsolution.at&amp;amp;blog=7995503&amp;amp;post=5012&amp;amp;subd=tomsondev&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Thu, 23 Mar 2017 13:08:16 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: Eclipse Newsletter - Internet of all the Things</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/cjjrutQ1upQ/</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/cjjrutQ1upQ/</link>
+	<description>The articles feature Eclipse IoT projects including, Eclipse Hono, Eclipse ioFog, Eclipse Kapua, and Eclipse Vorto.&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/cjjrutQ1upQ&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Thu, 23 Mar 2017 12:30:00 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: Board Election Results 2017</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/d32JLQRzac8/20170323_boardannouncement.php</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/d32JLQRzac8/20170323_boardannouncement.php</link>
+	<description>The Eclipse Foundation announces the 2017 Board Member Election Results.&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/d32JLQRzac8&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Thu, 23 Mar 2017 11:00:00 +0000</pubDate>
+</item>
+<item>
+	<title>Orion: Orion 14.0 New and Noteworthy</title>
+	<guid isPermaLink="false">http://planetorion.org/news/?p=879</guid>
+	<link>http://planetorion.org/news/2017/03/orion-14-0-new-and-noteworthy/</link>
+	<description>&lt;p&gt;Another three months and &lt;a href=&quot;http://planetorion.org/news/2017/03/announcing-orion-14/&quot;&gt;another awesome release&lt;/a&gt;! Its that time again where I share all of the cool new features, enhancements and fixes with you. As usual with every release, there were lots of changes, so lets jump right in.&lt;/p&gt;
+&lt;h2&gt;Accessibility&lt;/h2&gt;
+&lt;p&gt;The work that began in 13.0 to make Orion completely accessible to every developer continued at a furious pace in 14. This time around, our work was focussed on having the correct colour contrast.&lt;/p&gt;
+&lt;p&gt;We tightened up our colours in the light theme so that all colours pass the &lt;a href=&quot;https://www.w3.org/TR/WCAG20/#guidelines&quot;&gt;WCAG 2.0 AA guideline&lt;/a&gt; for colour contrast. The changes are subtle, but they do make text easier to read, as seen in this before-and-after snapshot of selected code in the editor.&lt;/p&gt;
+&lt;div class=&quot;wp-caption alignnone&quot; id=&quot;attachment_880&quot; style=&quot;width: 565px;&quot;&gt;&lt;a href=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/compare-selected-colors.png&quot;&gt;&lt;img alt=&quot;Selected text comparison&quot; class=&quot; wp-image-880&quot; height=&quot;317&quot; src=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/compare-selected-colors.png&quot; width=&quot;555&quot; /&gt;&lt;/a&gt;&lt;p class=&quot;wp-caption-text&quot;&gt;Comparing selected text in 14.0 vs. 13.0&lt;/p&gt;&lt;/div&gt;
+&lt;h2&gt;Language Tools&lt;/h2&gt;
+&lt;h3&gt;Automatic Project Configuration&lt;/h3&gt;
+&lt;p&gt;The JavaScript tooling can now read and understand complex project configurations and automatically configure Tern for the best development experience. For example, the tools can better read and understand package.json files and automatically load available plugins into Tern (rather than the user having to tailor their configuration settings).&lt;/p&gt;
+&lt;h3&gt;Projects Anywhere&lt;/h3&gt;
+&lt;p&gt;Using the new support from the platform to find project contexts, the JavaScript tools can now support a “project” at any level in the navigator. Where a project means any folder that contains JavaScript project-like files – package.json, .tern-project, etc.&lt;/p&gt;
+&lt;h3&gt;Smarter Defaults&lt;/h3&gt;
+&lt;p&gt;The default configuration for the JavaScript tools has been retooled to provide more support right out of the box. In Orion 13.0 (and before), we started the tools in a very bare-bone fashion, and would alert you about potential configuration changes (with quick fixes). Now we automatically start with ECMA, node and browser support, and configure your project as you code.&lt;/p&gt;
+&lt;h3&gt;Disable Linting In-File&lt;/h3&gt;
+&lt;p&gt;Tired of being nagged about a particular code pattern used in certain places (but like to be warned elsewhere)? You can now use the new quickfix to ignore the problem in the current file.&lt;/p&gt;
+&lt;div class=&quot;wp-caption alignnone&quot; id=&quot;attachment_884&quot; style=&quot;width: 342px;&quot;&gt;&lt;a href=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/disable-in-file.png&quot;&gt;&lt;img alt=&quot;Disable rule in-file&quot; class=&quot; wp-image-884&quot; height=&quot;183&quot; src=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/disable-in-file.png&quot; width=&quot;332&quot; /&gt;&lt;/a&gt;&lt;p class=&quot;wp-caption-text&quot;&gt;Disable rule in-file&lt;/p&gt;&lt;/div&gt;
+&lt;h3&gt;JavaScript Type Icons&lt;/h3&gt;
+&lt;p&gt;In an effort to make the overload of information (while coding in JavaScript) a bit more understandable, we have added icons to help users immediately understand the type of something. For example, &lt;strong&gt;F&lt;/strong&gt; stands for &lt;em&gt;function&lt;/em&gt;, &lt;strong&gt;O&lt;/strong&gt; is for &lt;em&gt;objects&lt;/em&gt;, &lt;strong&gt;C&lt;/strong&gt; is for &lt;em&gt;classes&lt;/em&gt;, etc.&lt;/p&gt;
+&lt;div class=&quot;wp-caption alignnone&quot; id=&quot;attachment_885&quot; style=&quot;width: 499px;&quot;&gt;&lt;a href=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/js-tools-icons.png&quot;&gt;&lt;img alt=&quot;Type icons&quot; class=&quot; wp-image-885&quot; height=&quot;356&quot; src=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/js-tools-icons-1024x745.png&quot; width=&quot;489&quot; /&gt;&lt;/a&gt;&lt;p class=&quot;wp-caption-text&quot;&gt;Type icons&lt;/p&gt;&lt;/div&gt;
+&lt;h3&gt;Improved ESLint configuration file support&lt;/h3&gt;
+&lt;p&gt;We have improved how the JavaScript tools handle the various forms of ESLint configuration files. We now properly support all entries of the files (&lt;a href=&quot;https://bugs.eclipse.org/bugs/show_bug.cgi?id=493824&quot;&gt;except for extends&lt;/a&gt;).&lt;/p&gt;
+&lt;h3&gt;SVG Support&lt;/h3&gt;
+&lt;p&gt;The CSS and HTML parsers have been updated to properly support &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/SVG&quot;&gt;SVG&lt;/a&gt; attributes and properties. The HTML and CSS validation has also been updated to properly process the new attributes and properties.&lt;/p&gt;
+&lt;h2&gt;Platform Improvements&lt;/h2&gt;
+&lt;h3&gt;Syntax Styling&lt;/h3&gt;
+&lt;p&gt;Syntax styling grammars can now define a &lt;strong&gt;firstLineMatch&lt;/strong&gt; attribute.  This enables multiple grammars to be defined for a content type, and the grammar that gets applied will be chosen based on the first line of content.&lt;/p&gt;
+&lt;h3&gt;Tasks&lt;/h3&gt;
+&lt;p&gt;The node server now stores its tasks metadata in a Mongo DB when running as multi-tenant.  As a result, requests querying long-running tasks can now be handled by different server instances that have access to the shared Mongo DB.&lt;/p&gt;
+&lt;h3&gt;Automatic Syntax Checking&lt;/h3&gt;
+&lt;p&gt;Previously, syntax checking took place when a file is saved – if you have autosave turned on in Orion, this is not a problem, as problem markers would be updated as you made changes. If however, you had autosave turned off, any problem markers would quickly become stale causing confusion. Now, in Orion 14, syntax checking will take place on a regular interval even if autosave is turned off, to try and avoid stale problem markers piling up.&lt;/p&gt;
+&lt;h3&gt;New File Client API&lt;/h3&gt;
+&lt;p&gt;The Orion file client has been updated with the ability to find a project given a particular resource path. The new API can be invoked as:&lt;/p&gt;
+&lt;p style=&quot;padding-left: 30px;&quot;&gt;&lt;strong&gt;fileClient.getProject(resourcePath, options)&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;Information Annotations&lt;/h3&gt;
+&lt;p&gt;A new type of annotation has been added to Orion – the &lt;strong&gt;info&lt;/strong&gt; annotation.&lt;/p&gt;
+&lt;div class=&quot;wp-caption alignnone&quot; id=&quot;attachment_881&quot; style=&quot;width: 494px;&quot;&gt;&lt;a href=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/Screen-Shot-2017-03-20-at-2.50.40-PM.png&quot;&gt;&lt;img alt=&quot;The info annotation&quot; class=&quot; wp-image-881&quot; height=&quot;88&quot; src=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/Screen-Shot-2017-03-20-at-2.50.40-PM.png&quot; width=&quot;484&quot; /&gt;&lt;/a&gt;&lt;p class=&quot;wp-caption-text&quot;&gt;The “info” annotation&lt;/p&gt;&lt;/div&gt;
+&lt;h3&gt;Annotation Visibility&lt;/h3&gt;
+&lt;p&gt;Always wanted to only show annotations in certain parts of the IDE? Well, now you can.&lt;/p&gt;
+&lt;p&gt;Simply navigate to the editor settings preference page, and look for the &lt;strong&gt;Annotations&lt;/strong&gt;, &lt;strong&gt;Overview Annotations&lt;/strong&gt; and &lt;strong&gt;Text Annotations&lt;/strong&gt; sections to configure annotation visibility as you’d like.&lt;/p&gt;
+&lt;div class=&quot;wp-caption alignnone&quot; id=&quot;attachment_882&quot; style=&quot;width: 506px;&quot;&gt;&lt;a href=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/Screen-Shot-2017-03-20-at-2.57.43-PM.png&quot;&gt;&lt;img alt=&quot;Annotation visibilities&quot; class=&quot; wp-image-882&quot; height=&quot;373&quot; src=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/Screen-Shot-2017-03-20-at-2.57.43-PM-1024x770.png&quot; width=&quot;496&quot; /&gt;&lt;/a&gt;&lt;p class=&quot;wp-caption-text&quot;&gt;Annotation visibilities&lt;/p&gt;&lt;/div&gt;
+&lt;p&gt;Don’t forget, you can also use the handy star buttons to have the preference(s) show up in the quick preference menu.&lt;/p&gt;
+&lt;h3&gt;IDE Themes&lt;/h3&gt;
+&lt;p&gt;Finally, after all this time, we have the ability to change the theme of not just the editor, but the entire IDE from the preferences!&lt;/p&gt;
+&lt;p&gt;Not happy with the default theme in Orion? Head over to the &lt;strong&gt;IDE Theme&lt;/strong&gt; preferences page to change to another theme (currently there are only two of them) or create your own (by modifying an existing theme and saving it as your own).&lt;/p&gt;
+&lt;div class=&quot;wp-caption alignnone&quot; id=&quot;attachment_883&quot; style=&quot;width: 499px;&quot;&gt;&lt;a href=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/theme-settings.png&quot;&gt;&lt;img alt=&quot;IDE Theme preferences&quot; class=&quot; wp-image-883&quot; height=&quot;361&quot; src=&quot;http://planetorion.org/news/wp-content/uploads/2017/03/theme-settings-1024x756.png&quot; width=&quot;489&quot; /&gt;&lt;/a&gt;&lt;p class=&quot;wp-caption-text&quot;&gt;IDE Theme preferences&lt;/p&gt;&lt;/div&gt;</description>
+	<pubDate>Tue, 21 Mar 2017 19:46:58 +0000</pubDate>
+</item>
+<item>
+	<title>Roxanne Joncas: Open IoT Challenge 3.0 — Winners</title>
+	<guid isPermaLink="false">https://medium.com/p/88fe75db263c</guid>
+	<link>https://medium.com/@roxanne.iot/open-iot-challenge-3-0-winners-88fe75db263c?source=rss-82f8afd3e513------2</link>
+	<description>&lt;p&gt;In case you missed the Eclipse IoT announcement last week, the &lt;a href=&quot;http://iot.eclipse.org/open-iot-challenge/&quot;&gt;Open IoT Challenge 3.0 winners&lt;/a&gt; were announced!&lt;/p&gt;&lt;h3&gt;And the winners are…&lt;/h3&gt;&lt;figure&gt;&lt;a href=&quot;http://iot.eclipse.org/open-iot-challenge/&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;https://cdn-images-1.medium.com/max/750/1*GrTXE-OQ_fL4HYDOEjhD-w.png&quot; /&gt;&lt;/a&gt;Open IoT Challenge 3.0 Winners&lt;/figure&gt;&lt;p&gt;Congratulations to the &lt;a href=&quot;https://medium.com/inmoodforlife/in-the-mood-for-life-open-iot-challenge-final-report-a0c19482118c#.fgxnwhxqc&quot;&gt;InMoodForLife&lt;/a&gt; team for coming in first. Their solution analyzes and monitors the sleep patterns of individuals affected by bipolar disorder. The goal of the solution is to improve the therapeutic approach, react, and adapt the treatment faster. The team already shared part of their future plans with us and it sounds very promising! We hope they will go on to help many individuals suffering from bipolar disorder.&lt;/p&gt;&lt;p&gt;The krishi IoT and RHDS teams also worked very hard and delivered great solutions. &lt;a href=&quot;https://www.eclipse.org/org/press-release/openiotchallenge3_winners.php&quot;&gt;Read the full announcement&lt;/a&gt; to find out more.&lt;/p&gt;&lt;figure&gt;&lt;img alt=&quot;&quot; src=&quot;https://cdn-images-1.medium.com/max/720/1*V7gJkIKmcuE7zepATG943A.png&quot; /&gt;Open IoT Challenge 3.0 Sponsors&lt;/figure&gt;&lt;img height=&quot;1&quot; src=&quot;https://medium.com/_/stat?event=post.clientViewed&amp;amp;referrerSource=full_rss&amp;amp;postId=88fe75db263c&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Mon, 20 Mar 2017 10:07:55 +0000</pubDate>
+</item>
+<item>
+	<title>vert.x project: Scala is here</title>
+	<guid isPermaLink="true">http://vertx.io/blog/scala-is-here</guid>
+	<link>http://vertx.io/blog/scala-is-here</link>
+	<description>&lt;article&gt;&lt;h2 id=&quot;tl-dr&quot;&gt;TL;DR&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Scala support for Vert.x is here!&lt;/li&gt;
+&lt;li&gt;It is based on Scala 2.12, no support for 2.11 planned&lt;/li&gt;
+&lt;li&gt;all Vert.x-modules are available in a Scala flavor&lt;/li&gt;
+&lt;li&gt;It’s awesome&lt;/li&gt;
+&lt;li&gt;Get started &lt;a href=&quot;https://github.com/vert-x3/vertx-sbt-starter&quot;&gt;here&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
+&lt;p&gt;The rise of &lt;a href=&quot;http://scala-lang.org/&quot;&gt;Scala&lt;/a&gt; as one of the most important languages on the JVM caught many (me included) by surprise. This hybrid of functional and imperative paradigms struck a chord with many developers. Thanks to Scala a lot of people who’d never have touched a language like Haskell got exposed to functional programming. This exposure was one of the driving forces to get streams and lambda into the JVM.&lt;/p&gt;
+&lt;p&gt;With the release of Vert.x 3.4.0 we finally introduced Scala to the family of supported languages: &lt;a href=&quot;https://github.com/vert-x3/vertx-lang-scala&quot;&gt;vertx-lang-scala&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In this post I will introduce the new stack and how the power of Scala can be used in your favorite reactive toolkit.&lt;/p&gt;
+&lt;h2 id=&quot;basics&quot;&gt;Basics&lt;/h2&gt;
+&lt;p&gt;vertx-lang-scala is based on Scala 2.12. There are no plans to support 2.11.&lt;/p&gt;
+&lt;p&gt;All modules available for Vert.x are supported (you can check  &lt;a href=&quot;https://github.com/vert-x3/vertx-lang-scala/tree/master/vertx-lang-scala-stack&quot;&gt;here&lt;/a&gt; ).&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;&lt;div class=&quot;admonition-block note&quot;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;admonition-icon&quot;&gt;&lt;i class=&quot;admonition-icon fa fa-comment&quot;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&quot;content&quot;&gt;&lt;span class=&quot;title&quot;&gt;Future and Promise both need a ExecutionContext &lt;/span&gt;&lt;br /&gt;&lt;span class=&quot;content&quot;&gt; Modules use the following naming-scheme: &lt;em&gt;io.vertx:-scala_2.12:&lt;/em&gt;. The Scala version of &lt;em&gt;io.vertx:vert-web:3.4.0&lt;/em&gt; would be &lt;em&gt;io.vertx:vertx-web-scala_2.12:3.4.0&lt;/em&gt;.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;There is an sbt-based &lt;a href=&quot;https://github.com/vert-x3/vertx-sbt-starter&quot;&gt;quickstart-project&lt;/a&gt; available that will be updated for each Vert.x-release.&lt;/p&gt;
+&lt;p&gt;Please note: Although &lt;a href=&quot;http://www.scala-sbt.org/&quot;&gt;sbt&lt;/a&gt; is used in this quickstart it is by no means required. There are no special plugins involved so vertx-lang-scala can easily be used with &lt;a href=&quot;https://docs.gradle.org/current/userguide/scala_plugin.html&quot;&gt;Gradle&lt;/a&gt; or &lt;a href=&quot;https://github.com/davidB/scala-maven-plugin&quot;&gt;Maven&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I use sbt as it is the default build system used for Scala projects.&lt;/p&gt;
+&lt;h2 id=&quot;quickstart&quot;&gt;Quickstart&lt;/h2&gt;
+&lt;p&gt;Let’s get started by cloning the quickstart:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;git clone git@github.com:vert-x3/vertx-sbt-starter.git&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You just got the following things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;An sbt project containing dependencies to Vert.x-core and Vert.x-web&lt;/li&gt;
+&lt;li&gt;The ability to create a fat-jat via &lt;code&gt;sbt assembly&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The ability to create a docker container via &lt;code&gt;sbt docker&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;A few example verticles&lt;/li&gt;
+&lt;li&gt;Unit test examples&lt;/li&gt;
+&lt;li&gt;a pre-configured Scala-shell inside sbt&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We will now run the application to get some quick satisfaction. Use &lt;code&gt;sbt assembly&lt;/code&gt; to produce the fat-jar followed by &lt;code&gt;java -jar target/scala-2.12/vertx-scala-sbt-assembly-0.1-SNAPSHOT.jar&lt;/code&gt;. Now point your browser to &lt;a href=&quot;http://localhost:8666/hello&quot;&gt;http://localhost:8666/hello&lt;/a&gt; for a classic welcome message.&lt;/p&gt;
+&lt;h2 id=&quot;the-details&quot;&gt;The details&lt;/h2&gt;
+&lt;p&gt;Open your IDE so we can take a look at what’s going on under the hood. We start with the &lt;em&gt;HttpVerticle&lt;/em&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.scala.sbt
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.lang.scala.&lt;span class=&quot;hljs-type&quot;&gt;ScalaVerticle&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.scala.ext.web.&lt;span class=&quot;hljs-type&quot;&gt;Router&lt;/span&gt;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; scala.concurrent.&lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;
+
+&lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;HttpVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;ScalaVerticle&lt;/span&gt; {&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;1&amp;gt;&lt;/span&gt;
+
+
+  &lt;span class=&quot;hljs-keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;startFuture&lt;/span&gt;(&lt;/span&gt;): &lt;span class=&quot;hljs-type&quot;&gt;Future&lt;/span&gt;[&lt;span class=&quot;hljs-type&quot;&gt;Unit&lt;/span&gt;] = { &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;2&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;router&lt;/span&gt; =&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Router&lt;/span&gt;.router(vertx) &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;3&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;route&lt;/span&gt; =&lt;/span&gt; router
+      .get(&lt;span class=&quot;hljs-string&quot;&gt;&quot;/hello&quot;&lt;/span&gt;)
+        .handler(_.response().end(&lt;span class=&quot;hljs-string&quot;&gt;&quot;world&quot;&lt;/span&gt;))
+
+    vertx &lt;span class=&quot;hljs-comment&quot;&gt;//&amp;lt;4&amp;gt;&lt;/span&gt;
+      .createHttpServer()
+      .requestHandler(router.accept)
+      .listenFuture(&lt;span class=&quot;hljs-number&quot;&gt;8666&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;0.0.0.0&quot;&lt;/span&gt;)  &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;5&amp;gt;&lt;/span&gt;
+        .map(_ =&amp;gt; ()) &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;6&amp;gt;&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;ScalaVerticle&lt;/em&gt; is the base class for all Scala-Verticles. It provides all required methods to integrate with the Vert.x-runtime.&lt;/li&gt;
+&lt;li&gt;There are two ways to start a Verticle. Overriding &lt;em&gt;startFuture&lt;/em&gt;, like in this example, tells Vert.x to only consider the Verticle fully started after the returned &lt;em&gt;Future[Unit]&lt;/em&gt; has been successfully completed. Alternatively one can override &lt;em&gt;start&lt;/em&gt; and by that signal to Vert.x the instant availability of the Verticle.&lt;/li&gt;
+&lt;li&gt;This block creates a &lt;em&gt;Router&lt;/em&gt; for incoming HTTP-requests. It registers a handler to answer with “world” if a request to the URL “/hello” arrives. The class is coming from the &lt;a href=&quot;http://vertx.io/docs/vertx-web/scala/&quot;&gt;Vert.x-web-module&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Every Verticle has access to the Vert.x-instance. Here we use it to create a webserver and register our router to handle incoming requests.&lt;/li&gt;
+&lt;li&gt;We finally reached the reason why I use &lt;em&gt;startFuture&lt;/em&gt; in the first place. All operations in Vert.x are asynchronous. So starting the webserver most definitely means it takes some more time until it bound to the given port (8666 in this case). That’s why &lt;em&gt;listenFuture&lt;/em&gt; is used, which returns a &lt;em&gt;Future&lt;/em&gt; which in turn contains the actual instance of the webserver that just got started. So our Verticle will be ready to receive requests &lt;em&gt;after&lt;/em&gt; the returned &lt;em&gt;Future&lt;/em&gt; has been completed.&lt;/li&gt;
+&lt;li&gt;In most cases we can return the &lt;em&gt;Future&lt;/em&gt; directly. In this case the &lt;em&gt;Future&lt;/em&gt; returned by &lt;em&gt;listenFuture&lt;/em&gt; has the wrong type. We get a &lt;em&gt;Future[HttpServer]&lt;/em&gt; but we need a &lt;em&gt;Future[Unit]&lt;/em&gt; as you can see in the signature of &lt;em&gt;startFuture&lt;/em&gt;. This call takes care of mapping the given &lt;em&gt;Future[HttpServer]&lt;/em&gt; to the required return type.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
+&lt;p&gt;I use &lt;a href=&quot;http://www.scalatest.org/&quot;&gt;ScalaTest&lt;/a&gt; for all my testing needs. It comes with stellar support for asynchronous operations and is a perfect fit for testing Vert.x-applications.&lt;/p&gt;
+&lt;p&gt;The following &lt;em&gt;HttpVerticleSpec&lt;/em&gt; shows how to test an HTTP-API using only Vert.x-classes. Personally I prefer &lt;a href=&quot;http://rest-assured.io/&quot;&gt;REST-assured&lt;/a&gt; with its rich DSL. For this post I wanted to stick with Vert.x-API, so here we go.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs scala&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;package&lt;/span&gt; io.vertx.scala.sbt
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; org.scalatest.&lt;span class=&quot;hljs-type&quot;&gt;Matchers&lt;/span&gt;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; scala.concurrent.&lt;span class=&quot;hljs-type&quot;&gt;Promise&lt;/span&gt;
+
+&lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;HttpVerticleSpec&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;VerticleTesting&lt;/span&gt;[&lt;/span&gt;&lt;span class=&quot;hljs-type&quot;&gt;HttpVerticle&lt;/span&gt;] &lt;span class=&quot;hljs-keyword&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Matchers&lt;/span&gt; { &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;1&amp;gt;&lt;/span&gt;
+
+  &lt;span class=&quot;hljs-string&quot;&gt;&quot;HttpVerticle&quot;&lt;/span&gt; should &lt;span class=&quot;hljs-string&quot;&gt;&quot;bind to 8666 and answer with 'world'&quot;&lt;/span&gt; in { &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;2&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;promise&lt;/span&gt; =&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Promise&lt;/span&gt;[&lt;span class=&quot;hljs-type&quot;&gt;String&lt;/span&gt;] &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;3&amp;gt;&lt;/span&gt;
+
+    vertx.createHttpClient()  &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;4&amp;gt;&lt;/span&gt;
+      .getNow(&lt;span class=&quot;hljs-number&quot;&gt;8666&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&quot;/hello&quot;&lt;/span&gt;,
+        r =&amp;gt; {
+          r.exceptionHandler(promise.failure)
+          r.bodyHandler(b =&amp;gt; promise.success(b.toString))
+        })
+
+    promise.future.map(res =&amp;gt; res should equal(&lt;span class=&quot;hljs-string&quot;&gt;&quot;world&quot;&lt;/span&gt;)) &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;5&amp;gt;&lt;/span&gt;
+  }
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;VerticleTesting&lt;/em&gt; is a base class for your tests included with the quickstart-project. It’s a small helper that takes care of deploying/un-deploying the Verticle to be tested and manages a Vert.x-instance. It additionally extends &lt;a href=&quot;http://www.scalatest.org/user_guide/async_testing&quot;&gt;AsyncFlatSpec&lt;/a&gt; so we can use Futures as test-return-types.&lt;/li&gt;
+&lt;li&gt;Isn’t it nice and readable?&lt;/li&gt;
+&lt;li&gt;The promise is required as the whole test will run async&lt;/li&gt;
+&lt;li&gt;We use the vertx-instance provided by &lt;em&gt;VerticleTesting&lt;/em&gt; to create a Netty-based HttpClient. We instruct the client to call the specified URL and to succeed the &lt;em&gt;Promise&lt;/em&gt; with the returned body.&lt;/li&gt;
+&lt;li&gt;This creates the actual assertion. After getting the &lt;em&gt;Future&lt;/em&gt; from the &lt;em&gt;Promise&lt;/em&gt; an assertion is created: &lt;em&gt;The Result should be equal to the String “world”&lt;/em&gt;. ScalaTest takes care of evaluating the returned &lt;em&gt;Future&lt;/em&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That’s all you need to get started!&lt;/p&gt;
+&lt;h2 id=&quot;futures-in-vertx-lang-scala&quot;&gt;Futures in vertx-lang-scala&lt;/h2&gt;
+&lt;p&gt;Now for a more in depth topic I think is worth mentioning. vertx-lang-scala treats async operations the Scala-way which is a little different from what you might be used from Vert.x. For async operations like subscribing to the eventbus or deploying a Verticle you would call a method like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs scala&quot;&gt;vertx.deployVerticle(&lt;span class=&quot;hljs-string&quot;&gt;&quot;com.foo.OtherVerticle&quot;&lt;/span&gt;, res -&amp;gt; {
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (res.succeeded()) {
+    startFuture.complete();
+  } &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; {
+    startFuture.fail(res.cause());
+  }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;em&gt;deployVerticle&lt;/em&gt; method takes the Verticle-name and a &lt;em&gt;Handler[AsyncResult]&lt;/em&gt; as its arguments. The &lt;em&gt;Handler[AsyncResult]&lt;/em&gt; is called after Vert.x tried deploying the Verticle. This style can also be used for Scala (which might ease the transition when coming from the Java-world) but their is a way more &lt;em&gt;scalaish&lt;/em&gt; way of doing this.&lt;/p&gt;
+&lt;p&gt;For every method taking a &lt;em&gt;Handler[AsyncResult]&lt;/em&gt; as its argument I create an alternative method using &lt;a href=&quot;http://docs.scala-lang.org/overviews/core/futures.html&quot;&gt;Scala-Futures&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs scala&quot;&gt;vertx.deployVerticleFuture(&lt;span class=&quot;hljs-string&quot;&gt;&quot;com.foo.OtherVerticle&quot;&lt;/span&gt;) &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;1&amp;gt;&lt;/span&gt;
+  .onComplete{  &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;2&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Success&lt;/span&gt;(s) =&amp;gt; println(s&lt;span class=&quot;hljs-string&quot;&gt;&quot;Verticle id is: $s&quot;&lt;/span&gt;) &lt;span class=&quot;hljs-comment&quot;&gt;// &amp;lt;3&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Failure&lt;/span&gt;(t) =&amp;gt; t.printStackTrace()
+  }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;A method providing a &lt;em&gt;Future&lt;/em&gt; based alternative gets &lt;em&gt;Future&lt;/em&gt; appended to its name and returns a &lt;em&gt;Future&lt;/em&gt; instead of taking a &lt;em&gt;Handler&lt;/em&gt; as its argument.&lt;/li&gt;
+&lt;li&gt;We are now free to use &lt;em&gt;Future&lt;/em&gt; the way we want. In this case onComplete is used to react on the completion.&lt;/li&gt;
+&lt;li&gt;Pattern matching on the result &lt;em&gt;&amp;lt;3&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I strongly recommend using this approach over using &lt;em&gt;Handlers&lt;/em&gt; as you won’t run into Callback-hell and you get all the goodies Scala provides for async operations.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;&lt;div class=&quot;admonition-block note&quot;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;admonition-icon&quot;&gt;&lt;i class=&quot;admonition-icon fa fa-comment&quot;&gt;&lt;/i&gt;&lt;/td&gt;&lt;td class=&quot;content&quot;&gt;&lt;span class=&quot;title&quot;&gt;Future and Promise both need a ExecutionContext &lt;/span&gt;&lt;br /&gt;&lt;span class=&quot;content&quot;&gt; The &lt;a href=&quot;https://github.com/vert-x3/vertx-lang-scala/blob/master/vertx-lang-scala/src/main/scala/io/vertx/lang/scala/VertxExecutionContext.scala&quot;&gt;VertxExecutionContext&lt;/a&gt; is made implicitly available inside the &lt;a href=&quot;https://github.com/vert-x3/vertx-lang-scala/blob/master/vertx-lang-scala/src/main/scala/io/vertx/lang/scala/ScalaVerticle.scala&quot;&gt;ScalaVerticle&lt;/a&gt;. It makes sure all  operations are executed on the correct Event Loop. If you are using Vert.x without Verticles you have to provide it on your own.
+&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;p&gt;&lt;/p&gt;
+&lt;h2 id=&quot;using-the-console&quot;&gt;Using the console&lt;/h2&gt;
+&lt;p&gt;A great feature of sbt is the embedded, configurable Scala-console. The console available in the quickstart-project is pre-configured to provide a fresh Vert.x-instance and all required imports so you can start playing around with Vert.x in an instant.&lt;/p&gt;
+&lt;p&gt;Execute the following commands in the project-folder to deploy the &lt;em&gt;HttpVerticle&lt;/em&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;sbt
+&amp;gt; console
+scala&amp;gt; vertx.deployVerticle(nameForVerticle[HttpVerticle])
+scala&amp;gt; vertx.deploymentIDs&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After  executing this sequence you can now point your browser &lt;a href=&quot;http://localhost:8666/hello&quot;&gt;http://localhost:8666/hello&lt;/a&gt; to see our message. The last command issued shows the Ids under which Verticles have been deployed.&lt;/p&gt;
+&lt;p&gt;To get rid of the deployment you can now type &lt;code&gt;vertx.undeploy(vertx.deploymentIDs.head)&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;that-s-it-&quot;&gt;That’s it!&lt;/h2&gt;
+&lt;p&gt;This was a very quick introduction to our new Scala-stack. I hope to have given you a little taste of the Scala goodness now available with Vert.x. I recommend digging a little more through the quickstart to get a feeling for what’s there.
+In my next blog post I will explain some of the decisions I made and the obstacles I faced with the differences between Java and Scala /Hint: They are way bigger than I was aware of).&lt;/p&gt;
+&lt;p&gt;Enjoy!&lt;/p&gt;
+&lt;/article&gt;</description>
+	<pubDate>Mon, 20 Mar 2017 00:00:00 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: Eclipse Demo Schedule at Devoxx US</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/VD5MHpOdaDw/</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/VD5MHpOdaDw/</link>
+	<description>Visit the Eclipse Foundation at booth #318 on March 21-23 in San Jose, CA for some exciting demos.&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/VD5MHpOdaDw&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Sun, 19 Mar 2017 10:40:00 +0000</pubDate>
+</item>
+<item>
 	<title>Orion: Announcing Orion 14</title>
 	<guid isPermaLink="false">http://planetorion.org/news/?p=878</guid>
 	<link>http://planetorion.org/news/2017/03/announcing-orion-14/</link>
@@ -18,11 +651,60 @@
 	<pubDate>Fri, 17 Mar 2017 18:56:01 +0000</pubDate>
 </item>
 <item>
-	<title>Eclipse Announcements: EclipseCon France: Last Chance to Submit!</title>
-	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/gPuHBFNepMg/cfp</guid>
-	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/gPuHBFNepMg/cfp</link>
-	<description>March 29 is the final submission deadline for EclipseCon France. Visit the CFP page for info. See you in Toulouse this June!&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/gPuHBFNepMg&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Fri, 17 Mar 2017 14:25:00 +0000</pubDate>
+	<title>itemis: Debugging Xtext grammars – what to do when your language is ambiguous</title>
+	<guid isPermaLink="true">https://blogs.itemis.com/en/debugging-xtext-grammars-what-to-do-when-your-language-is-ambiguous</guid>
+	<link>https://blogs.itemis.com/en/debugging-xtext-grammars-what-to-do-when-your-language-is-ambiguous</link>
+	<description>&lt;p&gt;&lt;a href=&quot;https://www.itemis.com/en/xtext/&quot;&gt;Xtext&lt;/a&gt; uses &lt;a href=&quot;http://www.antlr.org/&quot;&gt;ANTLR&lt;/a&gt; to generate a lexer and parser out of your grammar. Technically an &lt;a href=&quot;http://www.antlr.org/papers/LL-star-PLDI11.pdf&quot;&gt;LL(*)&lt;/a&gt; parser gets generated. This means it cannot deal with left recursion and has an infinite lookahead. You might know what that means, but to make it easier you could think about LL(*) parsers like this: A parser gets an ordered list of things (called tokens) to collect in a labyrinth. When it’s not clear which way to go it stands still and tries to look in all directions until their end. As soon as it is obvious where to go, it continues walking and collecting. There is no way back – so decisions should be correct. Sometimes this is not the case and the parser can make a clear decision. In this situation it gets tricky to understand where the problem is and how to resolve it. Mostly shown errors and warnings are not that meaningful.&lt;/p&gt; 
+&lt;img alt=&quot;debugging-xtext-grammar.jpg&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/Fotolia_87366402_S.jpg?t=1489825995643&amp;amp;width=640&amp;amp;name=Fotolia_87366402_S.jpg&quot; style=&quot;width: 640px; display: block; margin-left: auto; margin-right: auto;&quot; title=&quot;debugging-xtext-grammar.jpg&quot; width=&quot;640&quot; /&gt; 
+&lt;p&gt;&lt;br /&gt;What do you normally do when the Xtext workflow reports warnings or errors while the parser gets generated? Obviously errors can’t be ignored since the parser will not get generated and the workflow fails – but what about warnings? Do you try to solve them by staring at the grammar and try to think like a parser? Or you ignore them because it seams to work? Really?&lt;/p&gt; 
+&lt;p&gt;In projects we have seen people dealing with such problems in various ways. Ignoring warnings is not a good idea, since ANTLR switches off alternatives and you do not know which one. We have seen people consequently ignoring such warnings, because they cannot figure out the real cause and things got complex. However ignoring those warnings should not be an option.&lt;/p&gt; 
+&lt;p&gt;I have seen that a large group of Xtext users do not know &lt;a href=&quot;http://www.antlr3.org/works/&quot;&gt;ANTLRWorks&lt;/a&gt; or that it can help here. So let’s make two trivial examples to see how to use the tool with Xtext.&lt;/p&gt; 
+&lt;h2&gt;&lt;strong&gt;Warnings&lt;/strong&gt;&lt;/h2&gt; 
+&lt;p&gt;Let’s make a trivial example where it is really obvious what the problem is:&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;example-grammar-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/examplegrammar1.png?t=1489825995643&amp;amp;width=724&amp;amp;name=examplegrammar1.png&quot; style=&quot;width: 724px;&quot; title=&quot;example-grammar-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;We have two parser rules (Element1 and Element2) that look identically except that there are different parts optional. During the workflow runs it reports the following warnings:&lt;/p&gt; 
+&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;warning(200): ../com.itemis.blog.antlrworks.dsl/src-gen/com/itemis/blog/antlrworks/parser/antlr/internal/InternalDsl.g:114:2: Decision can match input such as &quot;'element' 'id' RULE_ID 'int' RULE_INT&quot; using multiple alternatives: 1, 2&lt;/span&gt;&lt;/p&gt; 
+&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;As a result, alternative(s) 2 were disabled for that input&lt;/span&gt;&lt;/p&gt; 
+&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt;warning(200): ../com.itemis.blog.antlrworks.dsl.ide/src-gen/com/itemis/blog/antlrworks/ide/contentassist/antlr/internal/InternalDsl.g:156:1: Decision can match input such as &quot;'element' 'id' RULE_ID 'int' RULE_INT&quot; using multiple alternatives: 1, 2&lt;/span&gt; &lt;/p&gt; 
+&lt;p&gt;In this case the parser gets generated, but it tells us that there were different alternatives for the same input and that ANTLR decided to disable 2 of them. It does not tell us which once. Let’s find out what the cause is.&lt;/p&gt; 
+&lt;p&gt;ANTLRWorks comes as an executable jar – running it should not be a problem as long as java is installed. If you want to open a grammar it expects an &lt;em&gt;*.g&lt;/em&gt; file. Xtext should have generated one in the &lt;em&gt;src-gen&lt;/em&gt; folder. In our example there is a &lt;em&gt;.g&lt;/em&gt; file located here: &lt;em&gt;com.itemis.blog.antlrworks.dsl/src-gen/com/itemis/blog/antlrworks/parser/antlr/internal/InternalDsl.g&lt;/em&gt;&lt;/p&gt; 
+&lt;p&gt;The grammar looks a bit strange and there is a lot of Java stuff in the grammar. ANTLRWorks will fail to compile the grammar… damn.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;Error-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/Error.png?t=1489825995643&amp;amp;width=495&amp;amp;name=Error.png&quot; style=&quot;width: 495px; display: block; margin-left: auto; margin-right: auto;&quot; title=&quot;Error-debugging-xtext-grammars.png&quot; width=&quot;495&quot; /&gt;Ok, the generated ANTLR grammar cannot be directly used in ANTLRWorks since it is modified to the needs of Xtext. To generate a so-called debugable grammar you need to modify the workflow a bit like this.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;workflow-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/workflow.png?t=1489825995643&amp;amp;width=724&amp;amp;name=workflow.png&quot; style=&quot;width: 724px;&quot; title=&quot;workflow-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;Now you’ll find a &lt;em&gt;.g&lt;/em&gt; file in &lt;em&gt;src-gen&lt;/em&gt; that carries the name &lt;em&gt;DebugInternal*.g. &lt;/em&gt;This file can be easily used with ANTLRWorks.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;Path-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/Path.png?t=1489825995643&amp;amp;width=724&amp;amp;name=Path.png&quot; style=&quot;width: 724px;&quot; title=&quot;Path-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;After you have started ANTLRWorks click on File-&amp;gt;Open and select the DebugInternal*.g file.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;File-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/File.png?t=1489825995643&amp;amp;width=724&amp;amp;name=File.png&quot; style=&quot;width: 724px;&quot; title=&quot;File-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;ANTLRWorks will open the grammar and you’ll see the different rules. So far no warnings are shown. To let the tool do it’s job click on debug – the button looks like a bug. After doing that the &lt;em&gt;ruleElement&lt;/em&gt; is marked read. By clicking on the rule you’ll see the problem that caused the warnings and the different alternatives. To really see what the disabled alternatives are you could enable them as shown in the next picture. The read arrows will show the disabled alternatives.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;ANTLRWorks-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/ANTLRWorks2.png?t=1489825995643&amp;amp;width=724&amp;amp;name=ANTLRWorks2.png&quot; style=&quot;width: 724px;&quot; title=&quot;ANTLRWorks-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;As already said this is a very trivial example and the tool just points out what we already know. In typical projects we have far more complex scenarios where it is nearly impossible to get the cause of a warning without ANTLRWorks. Especially when a lot of parts are optional it gets tricky. To really understand what the parser does there is the possibility to debug the grammar with a given input and see how the parsetree is constructed. Clicking on debug once more brings up a window to define the input.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;Input-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/Input1.png?t=1489825995643&amp;amp;width=724&amp;amp;name=Input1.png&quot; style=&quot;width: 724px;&quot; title=&quot;Input-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;Debugging in ANTLRWorks works similar like you know it from Eclipse and you can step forward and backward. At the end the parsetree will show that the parser went into the rule “Element1” instead of “Element2”. From a grammar point of view both rules would be valid but ANTLR switched of the alternative. Otherwise no clear decision could be made.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/Debug1.png?t=1489825995643&amp;amp;width=724&amp;amp;name=Debug1.png&quot; style=&quot;width: 724px;&quot; title=&quot;debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;If we add a second line as an input for the debugger and leave out the &lt;em&gt;intValue&lt;/em&gt; the parsetree looks like this:&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;Input-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/Input2.png?t=1489825995643&amp;amp;width=724&amp;amp;name=Input2.png&quot; style=&quot;width: 724px;&quot; title=&quot;Input-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/debug2.png?t=1489825995643&amp;amp;width=806&amp;amp;name=debug2.png&quot; style=&quot;width: 806px;&quot; title=&quot;debugging-xtext-grammars.png&quot; width=&quot;806&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;As the &lt;em&gt;intValue&lt;/em&gt; is mandatory in the &lt;em&gt;ruleElement1&lt;/em&gt; the parser will go into &lt;em&gt;ruleElement2&lt;/em&gt; for the second entry. This is the only case where “Element2” is picked. In this trivial example it’s not that hard to guess what the parser will do. In more complex example this debugging feature will really bring a big benefit to solve your ambiguities. &lt;/p&gt; 
+&lt;h2&gt;&lt;strong style=&quot;background-color: transparent;&quot;&gt;Errors&lt;/strong&gt;&lt;/h2&gt; 
+&lt;p&gt;&lt;strong&gt; &lt;/strong&gt;What about errors? Do you know what to do when the workflow reports that a rule has a non-LL(*) decision? What the hell is left-refactoring, syntactic predicates and why should I use backtracking – should I really? We’ll handle that in another blogpost, but for now let’s have a look at a simple language that has some expressions.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;grammar-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/grammar2.png?t=1489825995643&amp;amp;width=724&amp;amp;name=grammar2.png&quot; style=&quot;width: 724px;&quot; title=&quot;grammar-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt; &lt;/p&gt; 
+&lt;p&gt;When we try to run the Xtext workflow the generator will report the following error:&lt;/p&gt; 
+&lt;p&gt;&lt;span style=&quot;color: #ff0000;&quot;&gt; error(211): ../com.itemis.blog.antlrworks.dsl/src-gen/com/itemis/blog/antlrworks/parser/antlr/internal/InternalDsl.g:114:2: [fatal] rule ruleExpression has non-LL(*) decision due to recursive rule invocations reachable from alts 1,3. Resolve by left-factoring or using syntactic predicates or using backtrack=true option.&lt;/span&gt; &lt;/p&gt; 
+&lt;p&gt;Various exceptions are show below the error, but Xtext will generate the &lt;em&gt;.g &lt;/em&gt;file anyway – so there is a chance to find out what the problem is. You might already know what’s wrong, but let’s try to use ANTLRWorks. The compiler in ANTLRWorks will show the very same error, but after ignoring that the rule element is marked red. The different alternatives are marked red.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;ANTLRWorks-Error-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/ANTLRWorksError.png?t=1489825995643&amp;amp;width=724&amp;amp;name=ANTLRWorksError.png&quot; style=&quot;width: 724px;&quot; title=&quot;ANTLRWorks-Error-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;br /&gt; In this case left-recursion is not our problem. ANTLRWorks shows us, that &lt;em&gt;ruleBlockExpression&lt;/em&gt; and &lt;em&gt;ruleListLiteral&lt;/em&gt; are the cause.&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;rule1.png&quot; height=&quot;67&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/rule1.png?t=1489825995643&amp;amp;width=724&amp;amp;height=67&amp;amp;name=rule1.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;rule-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/rule2.png?t=1489825995643&amp;amp;width=724&amp;amp;name=rule2.png&quot; style=&quot;width: 724px;&quot; title=&quot;rule-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;After having a closer look it is obvious that the syntax is equal if there is only one expression inside – that makes our grammar ambiguous. Do we really want a &lt;em&gt;ListLiteral&lt;/em&gt; to exist on the same level as a &lt;em&gt;BlockExpression&lt;/em&gt;? Do we really want a &lt;em&gt;BlockExpression&lt;/em&gt; contain various other &lt;em&gt;BlockExpressions&lt;/em&gt;?&lt;/p&gt; 
+&lt;p&gt;After considering these questions a refactored grammar looks like this:&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;refactored-grammar-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/refactoredgrammar.png?t=1489825995643&amp;amp;width=724&amp;amp;name=refactoredgrammar.png&quot; style=&quot;width: 724px;&quot; title=&quot;refactored-grammar-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;After doing that the workflow will run through and we are good to have a second look in ANTLRWorks to see the parsetree for a simple expression:&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;input-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/input3.png?t=1489825995643&amp;amp;width=724&amp;amp;name=input3.png&quot; style=&quot;width: 724px;&quot; title=&quot;input-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;&lt;img alt=&quot;debug-Expression-debugging-xtext-grammars.png&quot; src=&quot;https://blogs.itemis.com/hs-fs/hubfs/Blog/ANTLRWorks/debugExpression.png?t=1489825995643&amp;amp;width=724&amp;amp;name=debugExpression.png&quot; style=&quot;width: 724px;&quot; title=&quot;debug-Expression-debugging-xtext-grammars.png&quot; width=&quot;724&quot; /&gt;&lt;/p&gt; 
+&lt;p&gt;These examples are very trivial to make it obvious where the problem is. The intension was to let you know how to use ANTLRWorks with Xtext. Don't ignore warnings anymore – you might not know the implications. The parsetree might look different as you though.&lt;/p&gt; 
+&lt;p&gt;Stay tuned for another post about syntactic predicates, left-recursion / left-refactoring and why backtracking is not an option. And if you've got any questions regarding Xtext – don't hesitate to contact us!&lt;/p&gt; 
+&lt;p&gt;&lt;a class=&quot;cta_button&quot; href=&quot;https://cta-image-cms2.hubspot.com/ctas/v2/public/cs/ci/?pg=78567f96-0e8e-4c0b-8822-523822026eba&amp;amp;pid=761475&amp;amp;ecid=&amp;amp;eid=&amp;amp;ic=&quot;&gt; &lt;img align=&quot;middle&quot; alt=&quot;Contact the  itemis Xtext team&quot; class=&quot;hs-cta-img &quot; src=&quot;https://no-cache.hubspot.com/cta/default/761475/78567f96-0e8e-4c0b-8822-523822026eba.png&quot; /&gt; &lt;/a&gt;&lt;/p&gt;  
+&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://track.hubspot.com/__ptq.gif?a=761475&amp;amp;k=14&amp;amp;r=https%3A%2F%2Fblogs.itemis.com%2Fen%2Fdebugging-xtext-grammars-what-to-do-when-your-language-is-ambiguous&amp;amp;bu=https%253A%252F%252Fblogs.itemis.com&amp;amp;bvt=rss&quot; style=&quot;width: 1px!important;&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Fri, 17 Mar 2017 15:00:04 +0000</pubDate>
+	<author>schill@itemis.com (Holger Schill)</author>
 </item>
 <item>
 	<title>Paolo Patierno: Vert.x and IoT in Rome : what a meetup !</title>
@@ -42,13 +724,6 @@
 &lt;p style=&quot;text-align: justify;&quot;&gt;&lt;img alt=&quot;17310150_1421561734583219_8414988688301135801_o&quot; class=&quot;alignnone size-full wp-image-4191&quot; src=&quot;https://paolopatierno.files.wordpress.com/2017/03/17310150_1421561734583219_8414988688301135801_o.jpg?w=620&quot; /&gt;&lt;/p&gt;
 &lt;p style=&quot;text-align: justify;&quot;&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/paolopatierno.wordpress.com/4147/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/paolopatierno.wordpress.com/4147/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=paolopatierno.wordpress.com&amp;amp;blog=15467422&amp;amp;post=4147&amp;amp;subd=paolopatierno&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;&lt;/p&gt;</description>
 	<pubDate>Fri, 17 Mar 2017 10:45:11 +0000</pubDate>
-</item>
-<item>
-	<title>Eclipse Announcements: Congratulations to the Open IoT Challenge 3.0 Winners!</title>
-	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/vfK7sx0arcc/openiotchallenge3_winners.php</guid>
-	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/vfK7sx0arcc/openiotchallenge3_winners.php</link>
-	<description>Eclipse IoT is pleased to announce the winners of the third annual Open IoT Challenge.&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/vfK7sx0arcc&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Thu, 16 Mar 2017 15:15:00 +0000</pubDate>
 </item>
 <item>
 	<title>JBoss Tools Team: JBoss Tools 4.4.4.AM1 for Eclipse Neon.2</title>
@@ -549,192 +1224,6 @@ While writing this blog post there is an issue with the OPTIONAL cardinality in 
 &lt;p&gt;&lt;a href=&quot;https://openchrom.files.wordpress.com/2017/03/img_20170310_203044.jpg&quot;&gt;&lt;img alt=&quot;&quot; class=&quot;alignnone size-large wp-image-479&quot; height=&quot;331&quot; src=&quot;https://openchrom.files.wordpress.com/2017/03/img_20170310_203044.jpg?w=640&amp;amp;h=331&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://wiki.eclipse.org/Hackathon_Hamburg&quot; target=&quot;_blank&quot;&gt;https://wiki.eclipse.org/Hackathon_Hamburg&lt;/a&gt;&lt;/p&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=openchrom.wordpress.com&amp;amp;blog=25006439&amp;amp;post=477&amp;amp;subd=openchrom&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
 	<pubDate>Tue, 14 Mar 2017 07:34:59 +0000</pubDate>
-</item>
-<item>
-	<title>Doug Schaefer: A Thought on a Componentized Future of IDEs.</title>
-	<guid isPermaLink="false">http://cdtdoug.ca/?p=838</guid>
-	<link>https://cdtdoug.ca/2017/03/13/a-thought-on-a-componentized-future-of-ides/</link>
-	<description>&lt;p&gt;If you haven’t heard of the Language Server Protocol and the language servers they inspire, take a Google around. There’s something very interesting happening here. &lt;span style=&quot;font-size: 1rem;&quot;&gt;The direction the LSP starts, and we’ve had discussions around a Debugger Server Protocol as well, opens the door to the componentization of IDEs.&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&quot;font-size: 1rem;&quot;&gt; And this is quite different than the plug-in model we have with Eclipse. Instead of creating a UI platform and having plug-ins add menu items, preference pages, editors, views, etc., build your IDE from the other direction. Take a collection of components that don’t have UI, that implement IMHO the hard things about IDEs, language parsers, build systems, debugger frameworks, and wrap them with your own custom purpose IDE “shell”.&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Eclipse suffers to a significant extent the “Tragedy of the Commons”. There is a large amount of inconsistency between plug-ins that do similar things but do it in different ways. Why is there a Perspective for every language? Because each language plug-in developer has different ideas on how the “Code” perspective should be laid out. And maybe, for their users, they’re right.&lt;/p&gt;
-&lt;p&gt;An alternative reality has language plug-in providers provide APIs that allow IDE builders to provide their own user experiences. Yes, that would be a lot more work and probably not practical. But as the doors open to a new generation of IDEs, language plug-in providers need to think about how they’d plug into many of them. It’s not clear which one will be the winner or even if there will be a winner.&lt;/p&gt;
-&lt;p&gt;It’s a brave new world. And we have a way to go before we figure it all out. But it’s a great time to think outside the box and see what sticks to the walls, or in my case, what I don’t erase from my whiteboard ;).&lt;/p&gt;</description>
-	<pubDate>Mon, 13 Mar 2017 15:56:08 +0000</pubDate>
-</item>
-<item>
-	<title>vert.x project: Data-driven Apps made easy with Vert.x 3.4.0 and headless CMS Gentics Mesh</title>
-	<guid isPermaLink="true">http://vertx.io/blog/data-driven-apps-made-easy-with-vert-x-3-4-0-and-headless-cms-gentics-mesh</guid>
-	<link>http://vertx.io/blog/data-driven-apps-made-easy-with-vert-x-3-4-0-and-headless-cms-gentics-mesh</link>
-	<description>&lt;article&gt;&lt;p&gt;In this article, I would like to share why Vert.x is not only a robust foundation for the &lt;a href=&quot;http://getmesh.io/&quot;&gt;headless Content Management System Gentics Mesh&lt;/a&gt; but also how the recent release 3.4.0 can be used to build a template-based web server with Gentics Mesh and handlebars.&lt;/p&gt;
-&lt;p&gt;A headless CMS focuses on delivering your content through an API and allows editors creating and managing that data through a web-based interface. Unlike a traditional CMS, it does not provide a specifically rendered output. The frontend part (the head) is literally cut off, allowing developers create websites, apps, or any other data-driven projects with their favourite technologies.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://vertx.io/blog/vert-x-3-4-0-is-released/&quot;&gt;Vert.x 3.4.0&lt;/a&gt; has just been released and it comes with a bunch of new features and bug fixes. I am especially excited about a small enhancement that changes the way in which the handlebars template engine handle their context data. Previously it was not possible to resolve Vert.x ‘s JsonObjects within the render context. With my enhancement &lt;a href=&quot;https://github.com/vert-x3/vertx-web/pull/509&quot;&gt;#509&lt;/a&gt; - released in Vert.x 3.4.0 - it is now possible to access nested data from these objects within your templates. Previously this would have required flattening out each object and resolving it individually, which would have been very cumbersome.&lt;/p&gt;
-&lt;p&gt;I’m going to demonstrate this enhancement by showing how to build a product catalogue using Vert.x together with handlebars templates to render and serve the web pages. The product data is managed, stored and delivered by the CMS server as source for JSON data.&lt;/p&gt;
-&lt;h2 id=&quot;clone-import-download-start-set-up-your-product-catalogue-website-quickly&quot;&gt;Clone, Import, Download, Start - Set up your product catalogue website quickly&lt;/h2&gt;
-&lt;p&gt;Let’s quickly set up everything you need to run the website before I walk you through the code.&lt;/p&gt;
-&lt;h3 id=&quot;1-clone-get-the-full-vert-x-with-gentics-mesh-example-from-github-https-github-com-gentics-mesh-vertx-example-&quot;&gt;1.  Clone - &lt;a href=&quot;https://github.com/gentics/mesh-vertx-example&quot;&gt;Get the full Vert.x with Gentics Mesh example from Github&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;Fire up your terminal and clone the example application to the directory of your choice.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;git clone git@github.com:gentics/mesh-vertx-example.git&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&quot;2-import-the-maven-project-in-your-favourite-ide&quot;&gt;2. Import - The maven project in your favourite IDE&lt;/h3&gt;
-&lt;p&gt;The application is set up as a maven project and can be imported in Eclipse IDE via File → Import → Existing Maven Project&lt;/p&gt;
-&lt;h3 id=&quot;3-download-get-the-headless-cms-gentics-mesh&quot;&gt;3. Download  -  Get the headless CMS Gentics Mesh&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://getmesh.io/Download&quot;&gt;Download the latest version of Gentics Mesh&lt;/a&gt; and start the CMS with this one-liner&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;hljs bash&quot;&gt;java -jar mesh-demo-&lt;span class=&quot;hljs-number&quot;&gt;0.6&lt;/span&gt;.xx.jar&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For the current example we are going to use the read-only user credentials (&lt;em&gt;webclient:webclient&lt;/em&gt;).
-If you want to play around with the demo data you can point your browser to &lt;a href=&quot;http://localhost:8080/mesh-ui/&quot;&gt;http://localhost:8080/mesh-ui/&lt;/a&gt; to reach the Gentics Mesh user interface and use one of the &lt;a href=&quot;http://getmesh.io/docs/beta/getting-started.html#_startup&quot;&gt;available demo credentials&lt;/a&gt; to login.&lt;/p&gt;
-&lt;p&gt;&lt;img class=&quot;img-responsive center-block&quot; src=&quot;http://vertx.io/assets/blog/vertx-mesh/mesh-ui.jpg&quot; title=&quot;Gentics Mesh User Interface&quot; /&gt;&lt;/p&gt;
-&lt;h3 id=&quot;4-start-the-application-and-browse-the-product-catalogue&quot;&gt;4. Start - The application and browse the product catalogue&lt;/h3&gt;
-&lt;p&gt;You can start the Vert.x web server by running Server.java.&lt;/p&gt;
-&lt;p&gt;That’s it - now you can access the product catalogue website in your browser: &lt;a href=&quot;http://localhost:3000&quot;&gt;http://localhost:3000&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;why-vert-x-is-a-good-fit-for-gentics-mesh&quot;&gt;Why Vert.x is a good fit for Gentics Mesh&lt;/h2&gt;
-&lt;p&gt;Before digging into the example, let me share a few thoughts on Vert.x and Gentics Mesh in combination. In this example Vert.x is part of the frontend stack in delivering the product catalogue website. But it might also be of interest to you that Vert.x is also used at the very heart of Gentics Mesh itself. The Gentics Mesh &lt;a href=&quot;http://getmesh.io/docs/beta/raml/&quot;&gt;REST API endpoints&lt;/a&gt; are built on top of Vert.x as a core component.&lt;/p&gt;
-&lt;p&gt;The great thing about Vert.x is that there are a lot of default implementations for various tasks such as authentication, database integration, monitoring and clustering. It is possible to use one or more features and omit the rest and thus your application remains lightweight.&lt;/p&gt;
-&lt;h2 id=&quot;curious-about-the-code-&quot;&gt;Curious about the code?&lt;/h2&gt;
-&lt;p&gt;Source: &lt;a href=&quot;https://github.com/gentics/mesh-vertx-example&quot;&gt;https://github.com/gentics/mesh-vertx-example&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Now that everything is up and running let’s have a detailed look at the code.&lt;/p&gt;
-&lt;p&gt;A typical deployment unit for Vert.x is a &lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_verticles&quot;&gt;verticle&lt;/a&gt;. In our case we use the verticle to bundle our code and run the web server within it. Once deployed, Vert.x will run the verticle and start the HTTP server code.&lt;/p&gt;
-
-
-&lt;p&gt;The &lt;a href=&quot;http://getmesh.io/docs/beta/#_java_rest_client&quot;&gt;Gentics Mesh REST client&lt;/a&gt; is used to communicate with the Gentics Mesh server. The &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/&quot;&gt;Vert.x web library&lt;/a&gt; is used to set up our &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/#_basic_vert_x_web_concepts&quot;&gt;HTTP Router&lt;/a&gt;. As with other routing frameworks like &lt;em&gt;Silex&lt;/em&gt; and &lt;em&gt;Express&lt;/em&gt;, the router can be used to create routes for inbound HTTP requests. In our case we only need two routes. The main route which accepts the request will utilize the &lt;a href=&quot;http://getmesh.io/docs/beta/#_webroot&quot;&gt;Gentics Mesh Webroot API Endpoint&lt;/a&gt; which is able to resolve content by a provided path. It will examine the response and add fields to the routing context.&lt;/p&gt;
-&lt;p&gt;The other route is chained and will take the previously prepared routing context and render the desired template using the &lt;a href=&quot;http://vertx.io/docs/vertx-web/java/#_templates&quot;&gt;handlebars template handler&lt;/a&gt;.&lt;/p&gt;
-
-
-&lt;p&gt;First we can handle various special requests path such as “/“ for the welcome page. Or the typical favicon.ico request. Other requests are passed to the Webroot API handler method.&lt;/p&gt;
-
-
-&lt;p&gt;Once the path has been resolved to a &lt;em&gt;WebRootResponse&lt;/em&gt; we can examine that data and determine whether it is a binary response or a JSON response. Binary responses may occur if the requested resource represents an image or any other binary data. Resolved binary contents are directly passed through to the client and the handlebars route is not invoked.&lt;/p&gt;
-&lt;p&gt;Examples&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://localhost:3000/&quot;&gt;http://localhost:3000/&lt;/a&gt; → welcome.hbs&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://localhost:3000/Automobiles&quot;&gt;http://localhost:3000/Automobiles&lt;/a&gt; → category → productList.hbs&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://localhost:3000/Automobiles/Tesla%20Roadster&quot;&gt;http://localhost:3000/Automobiles/Tesla Roadster&lt;/a&gt; → vehicle → productDetail.hbs&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://localhost:3000/Vehicle%20Images/tesla-roadster.jpg&quot;&gt;http://localhost:3000/Vehicle Images/tesla-roadster.jpg&lt;/a&gt; → binary passthru&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;JSON responses on the other hand are examined to determine the type of node which was located. A typical node response contains information about the schema used by the node. This will effectively determine the type of the located content (e.g.: category, vehicle).&lt;/p&gt;
-
-
-&lt;p&gt;&lt;img class=&quot;img-responsive center-block&quot; src=&quot;http://vertx.io/assets/blog/vertx-mesh/mesh-schemas.jpg&quot; title=&quot;Mesh Schemas&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;The demo application serves different pages which correspond to the identified type.
-Take a look at the template sources within &lt;em&gt;src/main/resources/templates/&lt;/em&gt; if you are interested in the &lt;a href=&quot;http://handlebarsjs.com/&quot;&gt;handlebars syntax&lt;/a&gt;. 
-The templates in the example should cover most common cases.   &lt;/p&gt;
-&lt;p&gt;&lt;img class=&quot;img-responsive center-block&quot; src=&quot;http://vertx.io/assets/blog/vertx-mesh/mesh-vertx-templates.jpg&quot; title=&quot;Handlebars Template Overview&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;The Mesh REST Client library internally makes use of the &lt;a href=&quot;http://vertx.io/docs/vertx-core/java/#_creating_an_http_client&quot;&gt;Vert.x core HTTP client&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/ReactiveX/RxJava&quot;&gt;RxJava&lt;/a&gt; is being used to handle these async requests. This way we can combine all asynchronously requested Gentics Mesh resources (breadcrumb, list of products) and add the loaded data into the routing context.&lt;/p&gt;
-&lt;p&gt;The Vert.x example server loads JSON content from the Gentics Mesh server. The &lt;em&gt;JsonObject&lt;/em&gt; is placed in the &lt;a href=&quot;https://github.com/jknack/handlebars.java&quot;&gt;handlebars&lt;/a&gt; render context and the template can access all nested fields within.&lt;/p&gt;
-&lt;p&gt;This way it is possible to resolve any field within the handlebars template.&lt;/p&gt;
-
-
-&lt;p&gt;That’s it! Finally, we can invoke mvn clean package in order to package our webserver. The &lt;a href=&quot;https://maven.apache.org/plugins/maven-shade-plugin/&quot;&gt;maven-shade-plugin&lt;/a&gt; will bundle everything and create an executable jar.&lt;/p&gt;
-&lt;h2 id=&quot;what-s-next-&quot;&gt;What’s next?&lt;/h2&gt;
-&lt;p&gt;Future releases of Gentics Mesh will refine the Mesh REST Client API and provide a &lt;a href=&quot;http://graphql.org/&quot;&gt;GraphQL&lt;/a&gt; which will reduce the JSON overhead. Using GraphQL will also reduce the amount of requests which need to be issued.&lt;/p&gt;
-&lt;p&gt;Thanks for reading. If you have any futher questions or feedback don’t hesitate to send me a tweet to &lt;a href=&quot;https://twitter.com/Jotschi/&quot;&gt;@Jotschi&lt;/a&gt; or &lt;a href=&quot;https://twitter.com/genticsmesh/&quot;&gt;@genticsmesh&lt;/a&gt;.&lt;/p&gt;
-&lt;/article&gt;</description>
-	<pubDate>Mon, 13 Mar 2017 00:00:00 +0000</pubDate>
-</item>
-<item>
-	<title>Wayne Beaton: Run Eclipse IDE on One Version of Java, but Target Another</title>
-	<guid isPermaLink="false">http://waynebeaton.wordpress.com/?p=4746</guid>
-	<link>https://waynebeaton.wordpress.com/2017/03/10/run-eclipse-ide-on-one-version-of-java-but-target-another/</link>
-	<description>&lt;p&gt;The &lt;em&gt;Eclipse IDE for Java™ Developers&lt;/em&gt; (and the other &lt;em&gt;Java developer&lt;/em&gt; variants) is itself a Java application that’s used to build Java applications. That relationship can be a bit weird to wrap your brain around.&lt;/p&gt;
-&lt;p&gt;Written almost entirely in Java, the Eclipse IDE requires a &lt;em&gt;Java Runtime Environment (JRE)&lt;/em&gt; to run. A JRE provides just the runtime platform: it doesn’t include the source code and Javadoc for any of the base Java libraries, or any of the development tools that are included in the Java Development Kit (JDK). An Eclipse IDE runs just fine on a JRE.&lt;/p&gt;
-&lt;p&gt;If you’re building Java applications, however, you really need to have access to a JDK. By default, an Eclipse IDE will configure itself to build applications against the JRE that it was launched on. If that JRE is part of a JDK, then you’ll get access to all the goodies that you need to get useful content assist, documentation, debugging support, etc. If the runtime platform is just a JRE, then a lot of that valuable goodness will be missing (but compiling still works because the &lt;em&gt;Java development tools&lt;/em&gt; include the &lt;em&gt;Eclipse Compiler for Java&lt;/em&gt;)&lt;/p&gt;
-&lt;p&gt;Here’s where it gets a bit weird. You can run an Eclipse IDE on a JRE from one version of Java and build applications that target one or more different versions of Java. You can, for example, run your Eclipse IDE on Java 8, but use it to build applications based on basically any earlier version of Java. You can select the default Java version for your workspace in the preferences (on the &lt;em&gt;Java &amp;gt; Compiler&lt;/em&gt; page), or individually in the properties for each Java Project (preferred).&lt;/p&gt;
-&lt;div class=&quot;wp-caption aligncenter&quot; id=&quot;attachment_4748&quot; style=&quot;width: 555px;&quot;&gt;&lt;img alt=&quot;&quot; class=&quot;size-full wp-image-4748&quot; src=&quot;https://waynebeaton.files.wordpress.com/2017/03/screenshot-from-2017-03-10-13-18-42.png?w=640&quot; /&gt;&lt;p class=&quot;wp-caption-text&quot;&gt;JDK Compliance settings in the Preferences (&lt;em&gt;Java &amp;gt; Compiler&lt;/em&gt;)&lt;/p&gt;&lt;/div&gt;
-&lt;p&gt;In order to actually build applications on a different version of Java, you need to connect your Eclipse IDE with the corresponding JDK. To do this, first install the JDK, and then tell the Eclipse IDE where to find it via the &lt;em&gt;Java &amp;gt; Installed JREs&lt;/em&gt; page in the workspace preferences. With additional JDKs installed, you can configure individual projects to use specific versions of the compiler and runtime.&lt;/p&gt;
-&lt;p&gt;All of this is a long way of saying that you can &lt;a href=&quot;https://waynebeaton.wordpress.com/2017/03/02/eclipse-ide-oxygen-edition-and-java-9/&quot;&gt;configure your Eclipse IDE, Oxygen Edition milestone build to run on a &lt;em&gt;Java 9 JRE&lt;/em&gt;&lt;/a&gt;, (download a JDK from the &lt;a href=&quot;https://jdk9.java.net/jigsaw/&quot;&gt;JDK 9 Early Access&lt;/a&gt; site) but use it to build applications that target earlier versions of Java (i.e. keep doing your day job). Even doing just this and providing feedback will be very helpful to the Eclipse projects involved in the Eclipse IDE. If you actually want to build Java 9 applications, you’ll need to install the &lt;a href=&quot;https://marketplace.eclipse.org/content/java-9-support-beta-oxygen&quot;&gt;Java 9 Support (BETA) for Oxygen&lt;/a&gt; from the Eclipse Marketplace and provide &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=JDT&quot;&gt;feedback to the team&lt;/a&gt;.&lt;/p&gt;
-&lt;blockquote&gt;&lt;p&gt;Note that the JDT product in the Eclipse Foundation’s Bugzilla instance is specifically for reporting bugs that are directly related to the Java development tools. Use the &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=EGit&quot;&gt;EGit product&lt;/a&gt; to report issues with the Git integration, the &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=m2e&quot;&gt;m2e product&lt;/a&gt; to report issues with the Maven integration, the &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Buildship&quot;&gt;Buildship product&lt;/a&gt; to report issues with the Gradle integration, the &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;&gt;Platform product&lt;/a&gt; for issues with regard to the basic IDE framework, the &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Web%20Tools&quot;&gt;Web Tools product&lt;/a&gt; for issues with enterprise Java and web development, or the &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;&gt;EPP (Eclipse Packaging Project) product&lt;/a&gt; if you’re not sure.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;Many committers from the various Eclipse projects that contribute to the Eclipse IDE, including at least a couple of committers from the Java development tools project in particular, will be at &lt;a href=&quot;http://devoxx.us&quot;&gt;Devoxx US&lt;/a&gt;. If you want to learn more about Java 9 support in the Eclipse IDE, you’ll be able to find them at the Eclipse Foundation’s booth (or we’ll be able to help you find them).&lt;/p&gt;
-&lt;p&gt;I’ll also be doing a demonstration of &lt;em&gt;Test First Java Development using the Eclipse IDE&lt;/em&gt; at the booth. Come by and see if I can keep myself within the twenty minute limit…&lt;/p&gt;
-&lt;p&gt;If you want to learn more about the great features available in the Eclipse IDE, follow &lt;a href=&quot;https://twitter.com/EclipseJavaIDE&quot;&gt;@EclipseJavaIDE&lt;/a&gt; on Twitter (&lt;a href=&quot;https://twitter.com/waynebeaton&quot;&gt;follow me&lt;/a&gt; while you’re at it).&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://devoxx.us/&quot;&gt;&lt;img alt=&quot;devoxx_black_transparent400&quot; class=&quot;aligncenter&quot; src=&quot;https://waynebeaton.files.wordpress.com/2017/02/devoxx_black_transparent400.png?w=300&amp;amp;h=104&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/waynebeaton.wordpress.com/4746/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/waynebeaton.wordpress.com/4746/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=waynebeaton.wordpress.com&amp;amp;blog=19425814&amp;amp;post=4746&amp;amp;subd=waynebeaton&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Fri, 10 Mar 2017 19:05:00 +0000</pubDate>
-</item>
-<item>
-	<title>Eclipse Announcements: Last week | Complete the IoT Developer Survey 2017</title>
-	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/jO_tm_QVRAg/iotsurvey2017eclipse</guid>
-	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/jO_tm_QVRAg/iotsurvey2017eclipse</link>
-	<description>Now's the time. Get your answers in and your voice heard! Complete the survey today.&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/jO_tm_QVRAg&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Fri, 10 Mar 2017 17:25:00 +0000</pubDate>
-</item>
-<item>
-	<title>PapyrusUML: Papyrus-RT Beta?!</title>
-	<guid isPermaLink="false">http://papyrusuml.wordpress.com/?p=548</guid>
-	<link>https://papyrusuml.wordpress.com/2017/03/09/papyrus-rt-beta/</link>
-	<description>&lt;p&gt;I just heard, through the minion grapevine, that there will be an official, managed beta for Papyrus for Real Time! Just like the ones for the big-boys commercial tools! I’m so proud of Me-RT!&lt;/p&gt;
-&lt;p&gt;The beta will be based on Papyrus-RT v0.9, which is planned for release on March 23 (aligned with Eclipse Neon.3), as reported in &lt;a href=&quot;https://papyrusuml.wordpress.com/2017/03/02/papyrus-rt-train-roadmap/&quot;&gt;Papyrus-RT Roadmap: follow the train&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;This is exciting! Users will be able to play with me, to give their opinions, to suggest improvements, and, basically, to help me get better!&lt;/p&gt;
-&lt;p&gt;I will get my product management/development minions to tell me more…and I will, of course, let you know!&lt;/p&gt;
-&lt;p&gt;Things are getting more and more interesting…&lt;/p&gt;&lt;br /&gt;Filed under: &lt;a href=&quot;https://papyrusuml.wordpress.com/category/uncategorized/&quot;&gt;Uncategorized&lt;/a&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/papyrusuml.wordpress.com/548/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/papyrusuml.wordpress.com/548/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/godelicious/papyrusuml.wordpress.com/548/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/delicious/papyrusuml.wordpress.com/548/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gofacebook/papyrusuml.wordpress.com/548/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/facebook/papyrusuml.wordpress.com/548/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gotwitter/papyrusuml.wordpress.com/548/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/twitter/papyrusuml.wordpress.com/548/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gostumble/papyrusuml.wordpress.com/548/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/stumble/papyrusuml.wordpress.com/548/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/godigg/papyrusuml.wordpress.com/548/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/digg/papyrusuml.wordpress.com/548/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/goreddit/papyrusuml.wordpress.com/548/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/reddit/papyrusuml.wordpress.com/548/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=papyrusuml.wordpress.com&amp;amp;blog=72365150&amp;amp;post=548&amp;amp;subd=papyrusuml&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Thu, 09 Mar 2017 18:35:39 +0000</pubDate>
-</item>
-<item>
-	<title>Kichwa Coders: Visualizing Docker Containers in Eclipse Che with Weave Scope</title>
-	<guid isPermaLink="false">http://kichwacoders.com/?p=1396</guid>
-	<link>https://kichwacoders.com/2017/03/09/visualizing-docker-containers-in-eclipse-che-with-weave-scope/</link>
-	<description>&lt;p&gt;&lt;img alt=&quot;7scope.png&quot; class=&quot;alignnone size-full wp-image-1550&quot; src=&quot;https://kichwacoders.files.wordpress.com/2017/03/7scope.png?w=840&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;Last Thursday, at the London PaaS User Group (&lt;a href=&quot;https://www.meetup.com/London-PaaS-User-Group-LOPUG/&quot; target=&quot;_blank&quot;&gt;LOPUG&lt;/a&gt;) meetup and heard the best type of technical talk: the kind that immediately inspires you to try out the technology you’ve just learnt about. &lt;a href=&quot;https://twitter.com/st3v&quot; target=&quot;_blank&quot;&gt;Stev Witzel&lt;/a&gt; showed a demo of a mash-up of Cloud Foundry tools (BOSH) with Weave Scope, an open source tool for visualizing, managing and monitoring containers. In the demo, Weave Scope provided a very slick visualization of the individual components and apps running on the Cloud Foundry platform and instantly gave me a deeper comprehension of the complex system.&lt;/p&gt;
-&lt;div class=&quot;embed-twitter&quot;&gt;
-&lt;blockquote class=&quot;twitter-tweet&quot;&gt;
-&lt;p dir=&quot;ltr&quot; lang=&quot;en&quot;&gt;Very very cool, &lt;a href=&quot;https://twitter.com/st3v&quot;&gt;@st3v&lt;/a&gt; shows &lt;a href=&quot;https://twitter.com/cloudfoundry&quot;&gt;@cloudfoundry&lt;/a&gt; meets &lt;a href=&quot;https://twitter.com/weaveworks&quot;&gt;@weaveworks&lt;/a&gt; scope and &quot;we can see what cloudfoundry looks like for the first time&quot; at &lt;a href=&quot;https://twitter.com/LOPUG&quot;&gt;@lopug&lt;/a&gt; &lt;a href=&quot;https://t.co/ItfaVA2Lz6&quot;&gt;pic.twitter.com/ItfaVA2Lz6&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;— Luke Marsden (@lmarsden) &lt;a href=&quot;https://twitter.com/lmarsden/status/837392795061075968&quot;&gt;March 2, 2017&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;/p&gt;&lt;/div&gt;
-&lt;p&gt;I was keen to try out Weave Scope so asked myself “&lt;em&gt;Can I quickly and easily use WeaveScope to visualise the Docker containers in Eclipse Che?&lt;/em&gt;”&lt;/p&gt;
-&lt;p&gt;The answer was a resounding yes! First of all the Weave Works &lt;a href=&quot;https://www.weave.works/docs/&quot; target=&quot;_blank&quot;&gt;documentation&lt;/a&gt; is terrific (note to self: guides with &lt;a href=&quot;https://www.katacoda.com/&quot; target=&quot;_blank&quot;&gt;Katacoda&lt;/a&gt; are my new gold standard for documentation). I found this  &lt;a href=&quot;https://www.weave.works/guides/monitor-docker-containers/&quot; target=&quot;_blank&quot;&gt;getting started article&lt;/a&gt; which I could adapt for my use-case. Given I already had Che installed &amp;amp; running on my Windows 10 laptop, installing &amp;amp; running Weave Scope was straightforward.&lt;/p&gt;
-&lt;pre class=&quot;brush: bash; title: ; notranslate&quot;&gt;docker-machine ssh default
-sudo wget -O /usr/local/bin/scope \
-   https://github.com/weaveworks/scope/releases/download/latest_release/scope
-sudo chmod a+x /usr/local/bin/scope
-sudo scope launch
-&lt;/pre&gt;
-&lt;p&gt; &lt;/p&gt;
-&lt;p&gt;To my pure joy and delight, it JUST WORKED!!&lt;/p&gt;
-&lt;p&gt;In one browser I had Eclipse Che up and running, I created a few different workspaces&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&quot;2scope&quot; class=&quot;alignnone size-full wp-image-1498&quot; src=&quot;https://kichwacoders.files.wordpress.com/2017/03/2scope.png?w=840&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;In a separate browser I had Weave Scope running.  As I created workspaces in Che, I would see them automagically appear in the scope tool.&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&quot;1scope.png&quot; class=&quot;alignnone size-full wp-image-1500&quot; src=&quot;https://kichwacoders.files.wordpress.com/2017/03/1scope.png?w=840&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;Incidentally, when I first started working with Che it took me a while to understand each Eclipse Che workspace is a separate Docker container, but with this visualisation the understanding is immediate. Weave Scope is a great tool for those new to the technologies to quickly grasp some key concepts.&lt;/p&gt;
-&lt;p&gt;I love, love, love visual representations of systems; it’s a more natural way to quickly gain insights into a system, not to mention commit things to memory in the imagery part of my brain. Weave Scope let’s you monitor CPU usage:&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&quot;3scope.png&quot; class=&quot;alignnone size-full wp-image-1520&quot; src=&quot;https://kichwacoders.files.wordpress.com/2017/03/3scope.png?w=840&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;You can also monitor memory usage as workspaces loaded up:&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&quot;4scope.png&quot; class=&quot;alignnone size-full wp-image-1523&quot; src=&quot;https://kichwacoders.files.wordpress.com/2017/03/4scope.png?w=840&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;Plus it has a nice way to inspect containers, even attach or exec a shell on them:&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&quot;5scope.png&quot; class=&quot;alignnone size-full wp-image-1526&quot; src=&quot;https://kichwacoders.files.wordpress.com/2017/03/5scope.png?w=840&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;In this case the system is relatively small and everything is running locally. However, I can easily see how it would be really useful to use Weave Scope when you want to troubleshoot Eclipse Che running in a production environment in the cloud by comparing it with a system running on a local development machine.&lt;/p&gt;
-&lt;p&gt;Weave Scope is &lt;a href=&quot;https://github.com/weaveworks/scope&quot; target=&quot;_blank&quot;&gt;open source&lt;/a&gt;, licensed under Apache-2.0.&lt;/p&gt;
-&lt;h2&gt;Key Takeaways&lt;/h2&gt;
-&lt;p&gt;Weave Scope is a great, slick, open source tool for visualizing &amp;amp; monitoring containers and is really super simple to get started with and use.&lt;/p&gt;
-&lt;p&gt;Eclipse Che, based on the ubiquitous Docker containers, allows leveraging of a whole world of awesome container-related technology, including the Weave Scope visualisation tool.&lt;/p&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/kichwacoders.wordpress.com/1396/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/kichwacoders.wordpress.com/1396/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=kichwacoders.com&amp;amp;blog=68353182&amp;amp;post=1396&amp;amp;subd=kichwacoders&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Thu, 09 Mar 2017 12:20:41 +0000</pubDate>
-</item>
-<item>
-	<title>Geniutec: Darkest Dark – Making it to the 4th most popular plugin in 30 Days</title>
-	<guid isPermaLink="false">https://www.genuitec.com/?p=514615</guid>
-	<link>https://www.genuitec.com/darkest-dark-popular-plugin/</link>
-	<description>&lt;p&gt;TL;DR Hit the market need, engage with users, and a lot of blood + sweat.The genesis.In short, we were tired of Eclipse looking stagnant. While other “cool” IDEs and Editors have built up their markets, Eclipse has looked about the same for the last decade. Many love that stability, but many others are ready for change. […]&lt;/p&gt;
-&lt;p&gt;The post &lt;a href=&quot;https://www.genuitec.com/darkest-dark-popular-plugin/&quot; rel=&quot;nofollow&quot;&gt;Darkest Dark – Making it to the 4th most popular plugin in 30 Days&lt;/a&gt; appeared first on &lt;a href=&quot;https://www.genuitec.com&quot; rel=&quot;nofollow&quot;&gt;Genuitec&lt;/a&gt;.&lt;/p&gt;</description>
-	<pubDate>Tue, 07 Mar 2017 15:27:10 +0000</pubDate>
-</item>
-<item>
-	<title>Mikael Barbero: I’m going to Devoxx US, and you should go as well!</title>
-	<guid isPermaLink="false">https://medium.com/p/1af00158c0e2</guid>
-	<link>https://medium.com/@mikael.barbero/going-to-devoxx-us-and-you-should-go-as-well-1af00158c0e2?source=rss-4a3bd8487ad8------2</link>
-	<description>&lt;p&gt;For the very first time, a Devoxx conference is happening in the &lt;a href=&quot;http://devoxx.us&quot;&gt;USA, in San Jose, CA&lt;/a&gt;. It starts on &lt;strong&gt;March 21, 2017&lt;/strong&gt; and is 3 days long. Devoxx conferences are famous in Europe (organized in &lt;a href=&quot;https://devoxx.be&quot;&gt;Belgium&lt;/a&gt;, &lt;a href=&quot;https://devoxx.fr&quot;&gt;France&lt;/a&gt;, &lt;a href=&quot;http://www.devoxx.co.uk&quot;&gt;UK&lt;/a&gt;, &lt;a href=&quot;http://devoxx.pl&quot;&gt;Poland&lt;/a&gt; and &lt;a href=&quot;http://devoxx.ma/&quot;&gt;Morocco&lt;/a&gt;) for their high quality talks from amazing speakers. They are also very high rated because it is organized &lt;strong&gt;by developers for developers&lt;/strong&gt;. Talks are all highly technical and the required experience from the targeted audience ranges from beginners to experts. So, with more than 200 sessions (chosen from 750 submissions!), everyone is able to craft its very own personal conference schedule. Do not trust me, &lt;a href=&quot;http://cfp.devoxx.us/2017/talks&quot;&gt;check the program&lt;/a&gt; by yourself!&lt;/p&gt;&lt;figure&gt;&lt;img alt=&quot;&quot; src=&quot;https://cdn-images-1.medium.com/max/1024/1*CaXFUNb2_scHuvarVT4eAw.jpeg&quot; /&gt;&lt;a href=&quot;https://www.flickr.com/photos/bejug/22947350265/in/album-72157658768130493/&quot;&gt;https://www.flickr.com/photos/bejug/22947350265/in/album-72157658768130493/&lt;/a&gt;&lt;/figure&gt;&lt;p&gt;And don’t be afraid if you miss a talk because you’ve met this incredible programer your were looking for to talk about this pull request of yours. All sessions are recorded and they are published on the &lt;a href=&quot;https://www.youtube.com/channel/UCCBVCTuk6uJrN3iFV_3vurg&quot;&gt;Devoxx YouTube channel&lt;/a&gt; shortly after the event. Devoxx conferences are also about networking and hacking, so everything is done to let you embrace the experience!&lt;/p&gt;&lt;p&gt;Here is my personal selection of talks. I know I won’t be able to attend to all of them, but it shows the wide variety of topics you can learn about by coming to Devoxx US.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/TPA-9716/5_JVM_Languages_in_50_minutes&quot;&gt;5 JVM Languages in 50 minutes&lt;/a&gt; by Joe Kutner. A crash course about Clojure, Scala, JRuby, Groovy and Kotlin. I wish Ceylon was cited instead of JRuby ;)&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/WLQ-7821/Deep_learning_with_tensorflow_for_multi-scale_modeling_of_cancer_patients&quot;&gt;Deep learning with tensorflow for multi-scale modeling of cancer patients&lt;/a&gt; by Olivier Gevaert&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/QKL-2419/Rust_for_Java_developers&quot;&gt;Rust for Java developers&lt;/a&gt; by Hanneli Tavante&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/YZQ-4043/your_next_JVM:_Panama,_Valhalla,_Metropolis&quot;&gt;your next JVM: Panama, Valhalla, Metropolis&lt;/a&gt; by Jon Rose&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/VUB-9615/New_Computer_Architectures_:_Explore_Quantum_Computers_&amp;amp;_SyNAPSE_neuromorphic_chips&quot;&gt;New Computer Architectures : Explore Quantum Computers &amp;amp; SyNAPSE neuromorphic chips&lt;/a&gt; by Peter Wagget&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/FLS-8924/55_New_Features_In_JDK_9&quot;&gt;55 New Features In JDK 9&lt;/a&gt; by Simon Ritter&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/AGA-7288/Architecting_for_Failures_in_Microservices:_Patterns_and_Lessons_Learned&quot;&gt;Architecting for Failures in Microservices: Patterns and Lessons Learned &lt;/a&gt;by Bhakti Mehta&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/RNK-9521/Developing_Java_Applications_with_the_Eclipse_IDE,_Neon_Edition&quot;&gt;Developing Java Applications with the Eclipse IDE, Neon Edition&lt;/a&gt; by Wayne Beaton and Gunnar Wagenknecht&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/MWF-9136/The_hardest_part_of_microservices:_your_data&quot;&gt;The hardest part of microservices: your data&lt;/a&gt; by Christian Posta&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/MNS-9892/gRPC_101_for_Java_Developers_-_building_fast_and_efficient_microservices&quot;&gt;gRPC 101 for Java Developers — building fast and efficient microservices&lt;/a&gt; by Ray Tsang&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/VPN-6094/Developing_for_the_Rest_of_the_World&quot;&gt;Developing for the Rest of the World&lt;/a&gt; by Eric Frohnhoefer&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/TMV-3761/Docker_Swarm_or_Kubernetes_–_Pick_your_framework!_&quot;&gt;Docker Swarm or Kubernetes — Pick your framework!&lt;/a&gt; by Arun Gupta&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/BJF-4911/The_Rise_of_Cloud_Development_-_The_Growth_and_Future_of_Eclipse_Che_-_Next_Generation_Eclipse_IDE&quot;&gt;The Rise of Cloud Development — The Growth and Future of Eclipse Che — Next Generation Eclipse IDE&lt;/a&gt; by Tyler Jewell&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://cfp.devoxx.us/2017/talk/ZPD-0169/Eclipse_Platform_News_-_The_return_of_the_IDE&quot;&gt;Eclipse Platform News — The return of the IDE&lt;/a&gt; by Lars Vogel&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;What are you waiting for? Devoxx US starts in two weeks now! Go to the &lt;a href=&quot;https://devoxx.us/registration/&quot;&gt;&lt;strong&gt;registration page&lt;/strong&gt;&lt;/a&gt; and get a pass now! If you’re not from the Valley, have a look at &lt;a href=&quot;https://devoxx.us/lodging/&quot;&gt;San Jose hotels with group rates&lt;/a&gt; for Devoxx US.&lt;/p&gt;&lt;a href=&quot;https://medium.com/media/d4088dceb31553b807dc2a5f2da7bb31/href&quot;&gt;https://medium.com/media/d4088dceb31553b807dc2a5f2da7bb31/href&lt;/a&gt;&lt;figure&gt;&lt;img alt=&quot;&quot; src=&quot;https://cdn-images-1.medium.com/max/260/1*jMC511AQVK7Ct6A6Usk6FQ.png&quot; /&gt;&lt;/figure&gt;&lt;p&gt;On &lt;strong&gt;Monday, March 20, 2017 an Eclipse dedicated event &lt;/strong&gt;is co-located with Devoxx US. If you want to know everything happening in the Eclipse ecosystem, join us for &lt;a href=&quot;https://www.eclipseconverge.org/na2017/&quot;&gt;&lt;strong&gt;Eclipse Converge 2017&lt;/strong&gt;&lt;/a&gt; (special rates apply for combined Devoxx US + Eclipse Converge passes).&lt;/p&gt;&lt;img height=&quot;1&quot; src=&quot;https://medium.com/_/stat?event=post.clientViewed&amp;amp;referrerSource=full_rss&amp;amp;postId=1af00158c0e2&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Tue, 07 Mar 2017 15:13:50 +0000</pubDate>
-</item>
-<item>
-	<title>Mikael Barbero: Moving from Tumblr to Medium</title>
-	<guid isPermaLink="true">https://mikael-barbero.tumblr.com/post/158106143310</guid>
-	<link>https://mikael-barbero.tumblr.com/post/158106143310</link>
-	<description>&lt;p&gt;Hey, this blog has moved. No new contents will be added here. Please see &lt;a href=&quot;https://medium.com/@mikael.barbero&quot;&gt;https://medium.com/@mikael.barbero&lt;/a&gt; for new contents. Note that articles from this blog have also been imported into Medium.&lt;/p&gt;</description>
-	<pubDate>Tue, 07 Mar 2017 11:49:46 +0000</pubDate>
-</item>
-<item>
-	<title>Mikael Barbero: RFPs for new Friends of Eclipse Enhancement Program (FEEP) projects posted</title>
-	<guid isPermaLink="false">https://medium.com/p/e957f853cbc9</guid>
-	<link>https://medium.com/@mikael.barbero/rfps-for-new-friends-of-eclipse-enhancement-program-feep-projects-posted-e957f853cbc9?source=rss-4a3bd8487ad8------2</link>
-	<description>&lt;p&gt;The Eclipse Foundation is actively seeking bids on &lt;strong&gt;10 new &lt;/strong&gt;&lt;a href=&quot;https://eclipse.org/contribute/dev_program.php&quot;&gt;&lt;strong&gt;FEEP&lt;/strong&gt;&lt;/a&gt;&lt;strong&gt; Development Efforts&lt;/strong&gt;, along with 5 outstanding Development Efforts that have not yet been bid. The objective is to have this work completed in the 1st quarter of 2017.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;https://projects.eclipse.org/development-efforts&quot;&gt;list of development efforts&lt;/a&gt;, and &lt;strong&gt;submit your bids before December 23, 2016&lt;/strong&gt;. See the &lt;a href=&quot;https://eclipse.org/contribute/dev_program/faq.php&quot;&gt;FAQ for the bidding process&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;This list has been crafted based on the feedbacks of the Eclipse PMC and the Eclipse Architecture council members. It also gathered some of the most wanted bugs on the bugzilla (i.e. the bugs with the highest number of votes).&lt;/p&gt;&lt;p&gt;As a reminder, the &lt;a href=&quot;https://eclipse.org/contribute/dev_program.php&quot;&gt;FEEP program&lt;/a&gt; uses the funds donated to the Eclipse Foundation to make direct improvements and enhancements to the Eclipse IDE/Platform.&lt;/p&gt;&lt;p&gt;&lt;em&gt;Originally published at &lt;/em&gt;&lt;a href=&quot;https://mikael-barbero.tumblr.com/post/154241861340/rfps-for-new-friends-of-eclipse-enhancement&quot;&gt;&lt;em&gt;mikael-barbero.tumblr.com&lt;/em&gt;&lt;/a&gt;&lt;em&gt;.&lt;/em&gt;&lt;/p&gt;&lt;img height=&quot;1&quot; src=&quot;https://medium.com/_/stat?event=post.clientViewed&amp;amp;referrerSource=full_rss&amp;amp;postId=e957f853cbc9&quot; width=&quot;1&quot; /&gt;</description>
-	<pubDate>Tue, 07 Mar 2017 11:25:00 +0000</pubDate>
 </item>
 
 </channel>

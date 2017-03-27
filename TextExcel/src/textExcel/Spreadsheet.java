@@ -16,6 +16,9 @@ public class Spreadsheet implements Grid{
 	@Override
 	public String processCommand(String command){
 		String location = command;
+		if (location.equals("")){
+			return "";
+		}
 		if (location.equalsIgnoreCase("clear")){//clears entire spreadsheet
 			for(int i=0;i<sheet.length;i++){
 				for (int j=0;j<sheet[i].length;j++){
@@ -23,18 +26,30 @@ public class Spreadsheet implements Grid{
 				}
 			}
 			return (getGridText());
-		} else if (location.equalsIgnoreCase("clear" + sheet)){
-			int i=0;
-			int j=0;
-			sheet[i][j]=sheet[getRows()][getCols()];
-			sheet[i][j] = new EmptyCell();
-			return (getGridText());
+		} 
+		if (location.startsWith("clear")){//clear one cell
+			sheet[Integer.parseInt(location.substring(7))-1][location.charAt(6)-65]=new EmptyCell();
+			return getGridText();
 			}
-		
+		if(location.charAt(0)>64&&location.charAt(0)<91){//inspection of cell
+			if(location.indexOf('=')==-1){
+				String cellArea = sheet[Integer.parseInt(location.substring(1))-1][location.charAt(0)-65].fullCellText();
+				return cellArea;
+			}
+			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell
+				if(location.charAt(2)==' ')
+					sheet[Integer.parseInt(location.substring(1,2))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
+				else
+					sheet[Integer.parseInt(location.substring(1,3))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
+				String textInCell = getGridText();
+				return textInCell;
+			}
+		}
 		return "";
 		
 		
 	}
+	
 	@Override
 	public int getRows(){
 		return sheet.length;
