@@ -41,11 +41,13 @@ public class Spreadsheet implements Grid{
 				return cellArea;
 			}
 			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell
+				SpreadsheetLocation loc = new SpreadsheetLocation(location.substring(0));
 				if(location.charAt(2)==' ')
 					sheet[Integer.parseInt(location.substring(1,2))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
 				else
 					sheet[Integer.parseInt(location.substring(1,3))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
 				String textInCell = getGridText();
+				System.out.println(textInCell);
 				return textInCell;
 			}
 		}else if(location.charAt(0)>97&&location.charAt(0)<122){//cell inspection if letter is lower case

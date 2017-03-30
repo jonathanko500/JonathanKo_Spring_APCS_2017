@@ -41,6 +41,7 @@ public class Spreadsheet implements Grid{
 				return cellArea;
 			}
 			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell
+				
 				if(location.charAt(2)==' ')
 					sheet[Integer.parseInt(location.substring(1,2))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
 				else
