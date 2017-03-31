@@ -19,6 +19,16 @@ public class Spreadsheet implements Grid{
 		if (location.equals("")){
 			return "";
 		}
+		String[] input = location.split(" ") ;
+		input[0]=input[0].toUpperCase();
+		if(input[0].equals("CLEAR")){
+			if(input.length>1){
+				input[1]=input[1].toUpperCase();
+				SpreadsheetLocation loc = new SpreadsheetLocation(input[1]);
+				sheet[loc.getRow()][loc.getCol()]=new EmptyCell();
+				return getGridText();
+			}
+		}
 		if (location.equalsIgnoreCase("clear")){//clears entire spreadsheet
 			for(int i=0;i<sheet.length;i++){
 				for (int j=0;j<sheet[i].length;j++){
@@ -26,16 +36,11 @@ public class Spreadsheet implements Grid{
 				}
 			}
 			return (getGridText());
-		} 
-		if (location.startsWith("clear")){//clear one cell
-			sheet[Integer.parseInt(location.substring(7))-1][location.charAt(6)-65]=new EmptyCell();
-			return getGridText();
-			}
+		}
 		if(location.charAt(0)>64&&location.charAt(0)<91){//inspection of cell
 			if(location.indexOf('=')==-1){
-				int i=Integer.parseInt(location.substring(1))-1;
-				int j=location.charAt(0)-65;
-				String cellArea = sheet[i][j].fullCellText();
+				SpreadsheetLocation loc = new SpreadsheetLocation(location.substring(0));
+				String cellArea = sheet[loc.getRow()][loc.getCol()].fullCellText();
 				return cellArea;
 			}
 			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell
@@ -53,7 +58,7 @@ public class Spreadsheet implements Grid{
 				String cellArea = sheet[i][j].fullCellText();
 				return cellArea;
 			}
-			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell
+			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell with lower case letter
 				if(location.charAt(2)==' ')
 					sheet[Integer.parseInt(location.substring(1,2))-1][location.charAt(0)-97]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
 				else
@@ -63,8 +68,6 @@ public class Spreadsheet implements Grid{
 			}
 		}
 		return "";
-		
-		
 	}
 	
 	@Override
@@ -86,24 +89,23 @@ public class Spreadsheet implements Grid{
 	@Override
 	public String getGridText(){
 		String spreadsheet = "";
-		spreadsheet += "    |";
-		char colsStart = 'A';
-		for(int i=0;i<12;i++){//makes the columns
-			spreadsheet += ((char)(colsStart))+ "        |";
-			colsStart +=1;
+		spreadsheet += "   |";
+		char columnValue = 'A';
+		for(int i=0;i<12; i++){//makes the columns
+			spreadsheet+=((char)(columnValue)) + "         |";
+			columnValue+=1;
 		}
-		spreadsheet += "\n";
-		
-		for (int i=0;i<20;i++){
+		spreadsheet +="\n";
+		for (int i = 0; i < 20; i++){//makes row
 			if(i<9){
-				spreadsheet += (i+1)+"  |";//single digit row value
-			}else {
-				spreadsheet += (i+1) + " |";//2 digit row value
+				spreadsheet += (i+1) + "  |";//one digit row
+			} else {
+				spreadsheet += (i+1) + " |";//two digit row
 			}
 			for(int j = 0; j<12 ; j++){
 				spreadsheet += sheet[i][j].abbreviatedCellText() + "|";
 			}
-			spreadsheet += "    ";
+			spreadsheet += "\n";
 		}
 		return spreadsheet;
 	}

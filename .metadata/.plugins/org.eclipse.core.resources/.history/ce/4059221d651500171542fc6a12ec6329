@@ -26,34 +26,22 @@ public class Spreadsheet implements Grid{
 				}
 			}
 			return (getGridText());
-		} 
-		if (location.startsWith("clear")){//clear one cell
-			sheet[Integer.parseInt(location.substring(7))-1][location.charAt(6)-65]=new EmptyCell();
-			return getGridText();
+		}
+		if (location.equalsIgnoreCase("clear ")){//clear one cell
+			if(location.startsWith("clear ")){
+				SpreadsheetLocation loc = new SpreadsheetLocation(location.substring(6));
+				sheet[loc.getRow()][loc.getCol()]=new EmptyCell();
+				return getGridText();
 			}
+		}
 		if(location.charAt(0)>64&&location.charAt(0)<91){//inspection of cell
 			if(location.indexOf('=')==-1){
-				int i=Integer.parseInt(location.substring(1))-1;
-				int j=location.charAt(0)-65;
-				String cellArea = sheet[i][j].fullCellText();
+				SpreadsheetLocation loc = new SpreadsheetLocation(location.substring(0));
+				String cellArea = sheet[loc.getRow()][loc.getCol()].fullCellText();
 				return cellArea;
 			}
-			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell
-				int i=Integer.parseInt(location.substring(1,2))-1;
-				int j=Integer.parseInt(location.substring(1,3))-1;
-				int k=location.charAt(0)-65;
-				if(location.charAt(2)==' ')
-					sheet[i][k]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
-				else
-					sheet[j][k]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
-				String textInCell = getGridText();
-				return textInCell;
-			}
-			
 		}
 		return "";
-		
-		
 	}
 	
 	@Override
@@ -75,24 +63,23 @@ public class Spreadsheet implements Grid{
 	@Override
 	public String getGridText(){
 		String spreadsheet = "";
-		spreadsheet += "    |";
-		char colsStart = 'A';
-		for(int i=0;i<12;i++){//makes the columns
-			spreadsheet += ((char)(colsStart))+ "        |";
-			colsStart +=1;
+		spreadsheet += "   |";
+		char columnValue = 'A';
+		for(int i=0;i<12; i++){//makes the columns
+			spreadsheet+=((char)(columnValue)) + "         |";
+			columnValue+=1;
 		}
-		spreadsheet += "\n";
-		
-		for (int i=0;i<20;i++){
+		spreadsheet +="\n";
+		for (int i = 0; i < 20; i++){//makes row
 			if(i<9){
-				spreadsheet += (i+1)+"  |";//single digit row value
-			}else {
-				spreadsheet += (i+1) + " |";//2 digit row value
+				spreadsheet += (i+1) + "  |";//one digit row
+			} else {
+				spreadsheet += (i+1) + " |";//two digit row
 			}
 			for(int j = 0; j<12 ; j++){
 				spreadsheet += sheet[i][j].abbreviatedCellText() + "|";
 			}
-			spreadsheet += "    ";
+			spreadsheet += "\n";
 		}
 		return spreadsheet;
 	}

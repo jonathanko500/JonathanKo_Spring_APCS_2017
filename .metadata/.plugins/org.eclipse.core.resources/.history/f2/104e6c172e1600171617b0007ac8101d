@@ -21,21 +21,21 @@ public class Spreadsheet implements Grid{
 		}
 		String[] input = location.split(" ") ;
 		input[0]=input[0].toUpperCase();
-		if(input[0].equals("CLEAR")){//clear location
-			if(input.length>1){
-				input[1]=input[1].toUpperCase();
-				SpreadsheetLocation loc = new SpreadsheetLocation(input[1]);
-				sheet[loc.getRow()][loc.getCol()]=new EmptyCell();
-				return getGridText();
-			}
-		}
-		if (location.equalsIgnoreCase("clear")){//clears entire spreadsheet
-			for(int i=0;i<sheet.length;i++){
-				for (int j=0;j<sheet[i].length;j++){
-					sheet[i][j] = new EmptyCell();
+		if(input[0].equals("CLEAR")){
+			if(input.length==0){
+				for(int i=0;i<sheet.length;i++){
+					for (int j=0;j<sheet[i].length;j++){
+						sheet[i][j] = new EmptyCell();
+					}
 				}
+				return (getGridText());
 			}
-			return (getGridText());
+			
+		}
+		if (location.equalsIgnoreCase("clear ")){//clear one cell
+			SpreadsheetLocation loc = new SpreadsheetLocation(location.substring(6));
+			sheet[loc.getRow()][loc.getCol()]=new EmptyCell();
+			return getGridText();
 		}
 		if(location.charAt(0)>64&&location.charAt(0)<91){//inspection of cell
 			if(location.indexOf('=')==-1){
@@ -44,7 +44,6 @@ public class Spreadsheet implements Grid{
 				return cellArea;
 			}
 			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell
-				
 				if(location.charAt(2)==' ')
 					sheet[Integer.parseInt(location.substring(1,2))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
 				else
