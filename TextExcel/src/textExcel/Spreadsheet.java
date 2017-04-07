@@ -29,7 +29,7 @@ public class Spreadsheet implements Grid{
 				return getGridText();
 			}
 		}
-		if (location.equalsIgnoreCase("clear")){//clears entire spreadsheet
+		if (input[0].equalsIgnoreCase("CLEAR")){//clears entire spreadsheet
 			for(int i=0;i<sheet.length;i++){
 				for (int j=0;j<sheet[i].length;j++){
 					sheet[i][j] = new EmptyCell();
@@ -37,9 +37,9 @@ public class Spreadsheet implements Grid{
 			}
 			return (getGridText());
 		}
-		if(location.charAt(0)>64&&location.charAt(0)<91){//inspection of cell
+		if(input[0].charAt(0)>64&&input[0].charAt(0)<91){//inspection of cell
 			if(location.indexOf('=')==-1){
-				SpreadsheetLocation loc = new SpreadsheetLocation(location.substring(0));
+				SpreadsheetLocation loc = new SpreadsheetLocation(input[0]);
 				String cellArea = sheet[loc.getRow()][loc.getCol()].fullCellText();
 				return cellArea;
 			}
@@ -49,21 +49,6 @@ public class Spreadsheet implements Grid{
 					sheet[Integer.parseInt(location.substring(1,2))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
 				else
 					sheet[Integer.parseInt(location.substring(1,3))-1][location.charAt(0)-65]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
-				String textInCell = getGridText();
-				return textInCell;
-			}
-		}else if(location.charAt(0)>97&&location.charAt(0)<122){//cell inspection if letter is lower case
-			if(location.indexOf('=')==-1){
-				int i=Integer.parseInt(location.substring(1))-1;
-				int j=location.charAt(0)-97;
-				String cellArea = sheet[i][j].fullCellText();
-				return cellArea;
-			}
-			if(location.indexOf('=')!=-1 && location.indexOf('"')!=-1){//prints text in cell with lower case letter
-				if(location.charAt(2)==' ')
-					sheet[Integer.parseInt(location.substring(1,2))-1][location.charAt(0)-97]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
-				else
-					sheet[Integer.parseInt(location.substring(1,3))-1][location.charAt(0)-97]=new TextCell(location.substring(location.indexOf('"')+1,location.lastIndexOf('"')));
 				String textInCell = getGridText();
 				return textInCell;
 			}
