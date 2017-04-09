@@ -6,6 +6,163 @@
     <language>en</language>
      <atom:link href="http://marketplace.eclipse.org/rss.xml" rel="self" type="application/rss+xml" />
       <item>
+    <title>SparkBuilderGenerator</title>
+    <link>http://marketplace.eclipse.org/content/sparkbuildergenerator</link>
+    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/sparkbuildergeneratoricon.png&quot; width=&quot;110&quot; height=&quot;80&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Sun, 2016-10-23 07:09&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Sat, 2017-04-08 08:20&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/hsparkwpb/listings&quot; title=&quot;Helo Spark&quot;&gt;Helo Spark&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;p&gt;Generates a builder according to the GoF pattern for Java domain objects.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Features:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt; Generates a builder with custom name patterns &lt;/li&gt;
+&lt;li&gt; Can generate &lt;a href=&quot;http://blog.crisp.se/2013/10/09/perlundholm/another-builder-pattern-for-java&quot;&gt;staged builder&lt;/a&gt; &lt;/li&gt;
+&lt;li&gt; Capable of regenerating the builder &lt;/li&gt;
+&lt;li&gt; Compatible with most version of Eclipse &lt;/li&gt;
+&lt;li&gt; Highly configurable, check the plugin&#039;s preferences page&lt;/li&gt;
+&lt;li&gt; Capable of generate builder methods for visible fields in superclass &lt;/li&gt;
+&lt;li&gt; Open source (with very permissible MIT license) &lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;&lt;strong&gt;Usage&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;To invoke the generation have a Java file active and press either the icon on the toolbar (the hammer) or Ctrl+Shift+B.&lt;br /&gt;
+You can click the small arrow next to the main icon to generate a different builder type (like staged builder), if you usually generate a certain kind of builder, set the default builder in the preferences page.&lt;br /&gt;
+You can set the preferences under: &lt;em&gt;Window-&amp;gt;Preferences-&amp;gt;Java-&amp;gt;Spark Builder Generator&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example result:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;
+  public class Clazz {
+        private Integer firstField;
+        private Long secondField;
+        @Generated(&quot;SparkTools&quot;)
+        private Clazz(Builder builder) {
+            this.firstField = builder.firstField;
+            this.secondField = builder.secondField;
+        }
+        /**
+         * Creates builder to build {@link Clazz}.
+         * @return created builder
+         */
+        @Generated(&quot;SparkTools&quot;)
+        public static Builder builder() {
+            return new Builder();
+        }
+        /**
+         * Builder to build {@link Clazz}.
+         */
+        @Generated(&quot;SparkTools&quot;)
+        public static class Builder {
+            private Integer firstField;
+            private Long secondField;
+
+            private Builder() {
+            }
+
+            /**
+            * Builder method for firstField parameter.
+            * @return builder
+            */
+            @Nonnull
+            public Builder withFirstField(@Nonnull Integer firstField) {
+                this.firstField = firstField;
+                return this;
+            }
+
+            /**
+            * Builder method for secondField parameter.
+            * @return builder
+            */
+            @Nonnull
+            public Builder withSecondField(@Nonnull Long secondField) {
+                this.secondField = secondField;
+                return this;
+            }
+
+            /**
+            * Builder method of the builder.
+            * @return built class
+            */
+            @Nonnull
+            public Clazz build() {
+                return new Clazz(this);
+            }
+        }
+    }
+&lt;/pre&gt;&lt;p&gt;
+&lt;strong&gt;Release notes&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;0.0.5&lt;/b&gt;&lt;br /&gt;
+Added handling for code style prefix and suffix, see &lt;a href=&quot;https://github.com/helospark/SparkTools/issues/5&quot;&gt;Github issue 5&lt;/a&gt;&lt;br /&gt;&lt;b&gt;0.0.6&lt;/b&gt;&lt;br /&gt;
+Added staged builder support., see &lt;a href=&quot;https://github.com/helospark/SparkTools/issues/4&quot;&gt;Github issue 4&lt;/a&gt;&lt;br /&gt;
+Staged builder allows you to verify that all of the mandatory fields are set at compile time.&lt;br /&gt;&lt;b&gt;0.0.7&lt;/b&gt;&lt;br /&gt;
+Option to add visible fields from superclasses to the builder, see &lt;a href=&quot;https://github.com/helospark/SparkTools/issues/7&quot;&gt;Github issue 7&lt;/a&gt;&lt;br /&gt;&lt;b&gt;0.0.8&lt;/b&gt;&lt;br /&gt;
+Fixed regression bug that was introduced in 0.0.7. While collection visible fields from superclasses, under some Eclipse configurations IllegalArgumentException occurred during java.lang.Object parsing.&lt;br /&gt;&lt;b&gt;0.0.9&lt;/b&gt;&lt;br /&gt;
+Added option to generate builder to selected class (in case of nested classes, or multiple classes in a single file), see &lt;a href=&quot;https://github.com/helospark/SparkTools/issues/10&quot;&gt;Github issue 10&lt;/a&gt;&lt;br /&gt;
+Improvements to previous Builder class removing logic&lt;br /&gt;&lt;b&gt;0.0.10&lt;/b&gt;&lt;br /&gt;
+Added the option to select which fields are generated in the builder, see &lt;a href=&quot;https://github.com/helospark/SparkTools/issues/8&quot;&gt;Github issue 8&lt;/a&gt;&lt;br /&gt;
+Fixed a small bug that deleted the previous builder when pressing the cancel button on the staging builder generator dialog&lt;br /&gt;
+Added MIT license file to plugin&#039;s site.xml, so it will show up on installation&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Additional information:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;On the github page: &lt;a href=&quot;https://github.com/helospark/SparkTools&quot;&gt;https://github.com/helospark/SparkTools&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
+     <pubDate>Sun, 23 Oct 2016 11:09:34 +0000</pubDate>
+ <dc:creator>hsparkwpb</dc:creator>
+ <guid isPermaLink="false">3130970 at http://marketplace.eclipse.org</guid>
+ <comments>http://marketplace.eclipse.org/content/sparkbuildergenerator#comments</comments>
+  </item>
+  <item>
+    <title>Microservices Plugin for Eclipse</title>
+    <link>http://marketplace.eclipse.org/content/microservices-plugin-eclipse</link>
+    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/microservices.png&quot; width=&quot;90&quot; height=&quot;80&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Thu, 2017-03-16 21:27&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Sat, 2017-04-08 06:27&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22oneclicklabs.io%22&quot;&gt;oneclicklabs.io&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/ksadayamuthu/listings&quot; title=&quot;Karthikeyan Sadayamuthu&quot;&gt;Karthikeyan Sadayamuthu&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;p&gt;Microservices Plugin for Eclipse&lt;br /&gt;
+1) Add RestController&lt;br /&gt;
+2) Add SoapEndpoint&lt;br /&gt;
+3) Add Interceptor&lt;br /&gt;
+4) Add Swagger Configuration&lt;/p&gt;
+&lt;p&gt;Under Development&lt;br /&gt;
+1) Spring Boot Microservices Project Template&lt;br /&gt;
+2) Spring Services&lt;br /&gt;
+3) Spring Config Server&lt;br /&gt;
+4) Spring Cloud Config&lt;br /&gt;
+6) Spring OAuth 2 Security&lt;br /&gt;
+7) ELK Logging&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
+     <pubDate>Fri, 17 Mar 2017 01:27:08 +0000</pubDate>
+ <dc:creator>ksadayamuthu</dc:creator>
+ <guid isPermaLink="false">3347906 at http://marketplace.eclipse.org</guid>
+ <comments>http://marketplace.eclipse.org/content/microservices-plugin-eclipse#comments</comments>
+  </item>
+  <item>
+    <title>Mylyn</title>
+    <link>http://marketplace.eclipse.org/content/mylyn</link>
+    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/default_images/default_2.png&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Wed, 2006-05-17 10:24&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Fri, 2017-04-07 18:18&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22Eclipse.org%22&quot;&gt;Eclipse.org&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/relves/listings&quot; title=&quot;Robert Elves&quot;&gt;Robert Elves&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;
+Mylyn integrates defect and project management systems, build systems and other software development tools with Eclipse. Once tasks from these systems are integrated, Mylyn’s task-focused interface reduces information overload and makes multi-tasking easy. It does this by making tasks a first class part of Eclipse, and providing rich and offline editing for repositories such as Bugzilla, Trac, and JIRA. Mylyn monitors your work activity to identify information relevant to the task-at-hand, and uses this task context to focus the Eclipse UI on the interesting information and hide the uninteresting.  &lt;/td&gt;
+&lt;td valign=&quot;top&quot;&gt;
+&lt;img src=&quot;http://tasktop.com/assets/images/screenshots/mylyn-task-list.png&quot; /&gt;&lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;&lt;p&gt;This puts the information you need to get work done at your fingertips and improves productivity by reducing searching, scrolling, and navigation. By making task context explicit Mylyn also facilitates multitasking, planning, reusing past efforts, and sharing expertise.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
+     <pubDate>Wed, 17 May 2006 14:24:51 +0000</pubDate>
+ <dc:creator>relves</dc:creator>
+ <guid isPermaLink="false">206 at http://marketplace.eclipse.org</guid>
+ <comments>http://marketplace.eclipse.org/content/mylyn#comments</comments>
+  </item>
+  <item>
+    <title>FeatureIDE</title>
+    <link>http://marketplace.eclipse.org/content/featureide</link>
+    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/logo1056.png&quot; width=&quot;110&quot; height=&quot;53&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Sat, 2010-12-04 04:23&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Fri, 2017-04-07 17:32&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22University%20of%20Magdeburg%22&quot;&gt;University of Magdeburg&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/tthuemsri/listings&quot; title=&quot;Thomas Thuem&quot;&gt;Thomas Thuem&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;p&gt;FeatureIDE supports feature-oriented software development in Eclipse&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
+     <pubDate>Sat, 04 Dec 2010 09:23:25 +0000</pubDate>
+ <dc:creator>tthuemsri</dc:creator>
+ <guid isPermaLink="false">22848 at http://marketplace.eclipse.org</guid>
+ <comments>http://marketplace.eclipse.org/content/featureide#comments</comments>
+  </item>
+  <item>
+    <title>JUnit-Tools</title>
+    <link>http://marketplace.eclipse.org/content/junit-tools</link>
+    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/logo_lg_110x110_0.png&quot; width=&quot;80&quot; height=&quot;80&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Tue, 2016-01-05 14:20&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Fri, 2017-04-07 14:31&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22JUnit-Tools-Team%22&quot;&gt;JUnit-Tools-Team&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/gstreng/listings&quot; title=&quot;Gerhard Streng&quot;&gt;Gerhard Streng&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;p&gt;A set of tools to optimize the creation and maintainability of JUnit tests.&lt;br /&gt;
+Write less, test more!&lt;/p&gt;
+&lt;p&gt;The main feature of JUnit-Tools is to generate JUnit test-elements (packages, classes, methods, test-cases, mocks) depending on an existing java-class and logic. It supports the Test-After Development: Create JUnit-tests after writing or modifying application code. Other input-channels (e.g. UML-models) for the generation of test-elements to support Test-Driven Development are possible but not available yet.&lt;/p&gt;
+&lt;p&gt;JUnit-tests usually have a similar structure: Create the preconditions, run the class under test, validate the postconditions. The created test-elements for the classes and methods should have the same name-conventions to find easily the corresponding tests. These are good reasons for a generator.&lt;/p&gt;
+&lt;p&gt;The main difference to other tools is, that JUnit-Tools is complete open source and that it is easy to adapt the structure and generated output to the own needs and requirements. There are many extension points and interfaces to change and contribute the base-implementations. An integration for the IDE eclipse is available and it&#039;s easy to install, set up and run the tools.&lt;/p&gt;
+&lt;p&gt; If you have any questions or issues, please feel free and send us an email: &lt;a href=&quot;mailto:support@junit-tools.org&quot;&gt;support@junit-tools.org&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;We are also happy about feedback and any ideas to improve the JUnit-Tools. &lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
+     <pubDate>Tue, 05 Jan 2016 19:20:51 +0000</pubDate>
+ <dc:creator>gstreng</dc:creator>
+ <guid isPermaLink="false">2670402 at http://marketplace.eclipse.org</guid>
+ <comments>http://marketplace.eclipse.org/content/junit-tools#comments</comments>
+  </item>
+  <item>
     <title>Ctrlflow Code Search for Java</title>
     <link>http://marketplace.eclipse.org/content/ctrlflow-code-search-java</link>
     <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/ctrlflow-logo_1.png&quot; width=&quot;110&quot; height=&quot;80&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Fri, 2013-08-09 14:38&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Fri, 2017-04-07 04:58&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22Codetrails%20GmbH%22&quot;&gt;Codetrails GmbH&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/cteamrav/listings&quot; title=&quot;Codetrails Team&quot;&gt;Codetrails Team&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;h2 style=&quot;font-size:3em;&quot;&gt;Code Search. Redefined.&lt;/h2&gt;
@@ -114,141 +271,6 @@
  <dc:creator>twebbcke</dc:creator>
  <guid isPermaLink="false">2456312 at http://marketplace.eclipse.org</guid>
  <comments>http://marketplace.eclipse.org/content/webclipse#comments</comments>
-  </item>
-  <item>
-    <title>TypeScript</title>
-    <link>http://marketplace.eclipse.org/content/typescript-0</link>
-    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/ts-110x80.png&quot; width=&quot;110&quot; height=&quot;80&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Wed, 2016-09-21 18:24&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Thu, 2017-04-06 12:59&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22Genuitec%2C%20LLC%22&quot;&gt;Genuitec, LLC&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/twebbcke/listings&quot; title=&quot;Tim Webb&quot;&gt;Tim Webb&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;p&gt;TypeScript plugin with: content assist, tsconfig.js support, real-time validation, formatting, coloring, and more. Optimized for Angular 2.&lt;/p&gt;
-&lt;p&gt;Also in &lt;a href=&quot;https://genuitec.com/products/webclipse/&quot;&gt;Webclipse&lt;/a&gt; - click to learn more.&lt;/p&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
-     <pubDate>Wed, 21 Sep 2016 22:24:43 +0000</pubDate>
- <dc:creator>twebbcke</dc:creator>
- <guid isPermaLink="false">3083980 at http://marketplace.eclipse.org</guid>
- <comments>http://marketplace.eclipse.org/content/typescript-0#comments</comments>
-  </item>
-  <item>
-    <title>Code Sharing for Slack</title>
-    <link>http://marketplace.eclipse.org/content/code-sharing-slack</link>
-    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/ecs.png&quot; width=&quot;110&quot; height=&quot;80&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Mon, 2015-10-26 10:10&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Thu, 2017-04-06 12:58&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22Genuitec%2C%20LLC%22&quot;&gt;Genuitec, LLC&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/twebbcke/listings&quot; title=&quot;Tim Webb&quot;&gt;Tim Webb&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;p&gt;Code Sharing for Slack provides code sharing to your &lt;strong&gt;#Slack&lt;/strong&gt; channel automatically!  100% free, installable separably from the &lt;a href=&quot;https://www.genuitec.com/products/webclipse/&quot;&gt;Webclipse&lt;/a&gt; suite.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://www.genuitec.com/wp-content/uploads/2016/06/howto_new.gif&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;If you have Slack for Eclipse installed and a teammate shares code with you, your Eclipse can offer opening the same code being discussed.&lt;/p&gt;
-&lt;p&gt;Made available for free, for unlimited usage.  &lt;a href=&quot;https://www.genuitec.com/products/webclipse/pricing/&quot;&gt;Learn more&lt;/a&gt; about other always free Webclipse features as well as some other great features as well!&lt;/p&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
-     <pubDate>Mon, 26 Oct 2015 14:10:50 +0000</pubDate>
- <dc:creator>twebbcke</dc:creator>
- <guid isPermaLink="false">2582095 at http://marketplace.eclipse.org</guid>
- <comments>http://marketplace.eclipse.org/content/code-sharing-slack#comments</comments>
-  </item>
-  <item>
-    <title>Angular IDE</title>
-    <link>http://marketplace.eclipse.org/content/angular-ide</link>
-    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/angular.png&quot; width=&quot;110&quot; height=&quot;80&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Wed, 2016-11-09 19:04&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Thu, 2017-04-06 12:56&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22Genuitec%2C%20LLC%22&quot;&gt;Genuitec, LLC&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/twebbcke/listings&quot; title=&quot;Tim Webb&quot;&gt;Tim Webb&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;p&gt;Now with Angular 4! Content assist, TypeScript 2.2 support, real-time validation, formatting, debugging, and more.&lt;/p&gt;
-&lt;p&gt;Standalone version at &lt;a href=&quot;https://www.genuitec.com/products/angular-ide/&quot;&gt;Angular IDE&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
-     <pubDate>Thu, 10 Nov 2016 00:04:48 +0000</pubDate>
- <dc:creator>twebbcke</dc:creator>
- <guid isPermaLink="false">3157661 at http://marketplace.eclipse.org</guid>
- <comments>http://marketplace.eclipse.org/content/angular-ide#comments</comments>
-  </item>
-  <item>
-    <title>Yatta Launcher for Eclipse</title>
-    <link>http://marketplace.eclipse.org/content/yatta-launcher-eclipse</link>
-    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/launcherIcon256_0.png&quot; width=&quot;80&quot; height=&quot;80&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Thu, 2015-09-24 05:17&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Thu, 2017-04-06 07:24&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22Yatta%20Solutions%20GmbH%22&quot;&gt;Yatta Solutions GmbH&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/febelshuser/listings&quot; title=&quot;Frederic Ebelshaeuser&quot;&gt;Frederic Ebelshaeuser&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;h2&gt;Share Your Eclipse Setup With Your Team&lt;/h2&gt;
-&lt;p&gt;The Launcher is a lightweight desktop app and the easiest way to organize your Eclipse setups – for yourself, your team, or within the community. Save your project setup as a profile, share it with your team and just start building great software. Try it now - it&#039;s free!&lt;/p&gt;
-&lt;p align=&quot;center&quot;&gt;
-		&lt;a href=&quot;https://www.yatta.de/profiles?utm_source=eclipse&amp;amp;utm_medium=marketplace%20entry&amp;amp;utm_campaign=Eclipse%20Promoted%20Solution&amp;amp;utm_term=promoted%20solution?download&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://marketplace.yatta.de/static/content/eclipse-marketplace/download.png&quot; border=&quot;0&quot; alt=&quot;download now&quot; /&gt;&lt;/a&gt;
-	&lt;/p&gt;
-&lt;h3&gt;What is a Profile?&lt;/h3&gt;
-&lt;p&gt;A profile is a &quot;snapshot&quot; of an Eclipse workspace combination containing plug-ins, workspace settings for your team (e.g. project metadata and -preferences, build server configurations and working sets), and links to source code and task repositories (like on GitHub). No actual source code of course.&lt;/p&gt;
-&lt;p&gt;The Yatta Launcher lets you build a profile form any Eclipse setup – automatically. You can even share your profiles with other users and, if you like, with the community. And it&#039;s for free!&lt;/p&gt;
-&lt;p align=&quot;center&quot;&gt;
-		&lt;a href=&quot;https://www.yatta.de/profiles?utm_source=eclipse&amp;amp;utm_medium=marketplace%20entry&amp;amp;utm_campaign=Eclipse%20Promoted%20Solution&amp;amp;utm_term=promoted%20solution&quot; target=&quot;_blank&quot;&gt;&lt;br /&gt;&lt;img src=&quot;http://marketplace.yatta.de/static/content/eclipse-marketplace/eclipse-as-profile.png&quot; border=&quot;0&quot; alt=&quot;Eclipse as a profile containing settings, plug-ins, repositories and so on.&quot; style=&quot;max-width: 80%; max-height=80%; height:auto; width:auto;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;h3&gt;Use Cases&lt;/h3&gt;
-&lt;p&gt;Profiles help you manage all your Eclipse installations. Just install the Launcher, and you are good to go. With Profiles, you, your team, or your users will be able to install and update any project setup. Here are some use cases for Profiles:&lt;/p&gt;
-&lt;ul&gt;&lt;li&gt;Easily organize your local installations:&lt;/li&gt;
-&lt;ul&gt;&lt;li&gt;Start any Eclipse setup from a central location.&lt;/li&gt;
-&lt;li&gt;Make your setups distinct with a name, an icon and a description.&lt;/li&gt;
-&lt;/ul&gt;&lt;li&gt;Share your Eclipse setup with your project team:&lt;/li&gt;
-&lt;ul&gt;&lt;li&gt;Help new team members get productive.&lt;/li&gt;
-&lt;li&gt;Distribute your new project setup faster. Stop sending zip files with Eclipse setups.&lt;/li&gt;
-&lt;/ul&gt;&lt;li&gt;Create profile templates for your team(s):&lt;/li&gt;
-&lt;ul&gt;&lt;li&gt;Create and distribute your profiles for different project teams or for specific tasks or requirements.&lt;/li&gt;
-&lt;li&gt;Automatically inform teams about profile updates.&lt;/li&gt;
-&lt;li&gt;Build chains of parent, child, and grandchild profiles to manage project setups within your company and across your teams.&lt;/li&gt;
-&lt;/ul&gt;&lt;li&gt;Transfer your Eclipse setup to a new workstation:&lt;/li&gt;
-&lt;ul&gt;&lt;li&gt;Install your profile on another operating system.&lt;/li&gt;
-&lt;/ul&gt;&lt;/ul&gt;&lt;h3&gt;Features&lt;/h3&gt;
-&lt;h4&gt;Installation&lt;/h4&gt;
-&lt;ul&gt;&lt;li&gt;Download a profile and get a working Eclipse setup including the workspace.&lt;/li&gt;
-&lt;li&gt;Turn any Eclipse installation into a profile.&lt;/li&gt;
-&lt;li&gt;Install your Eclipse IDE and workspace configuration on another device - and even on another operating system.&lt;/li&gt;
-&lt;li&gt;Delete or uninstall obsolete profiles.&lt;/li&gt;
-&lt;/ul&gt;&lt;h4&gt;Sharing&lt;/h4&gt;
-&lt;ul&gt;&lt;li&gt;Deploy your Eclipse setup and workspace to your whole team, and get everyone ready to start coding in seconds.&lt;/li&gt;
-&lt;li&gt;Create a group to privately share your profile with your team.&lt;/li&gt;
-&lt;li&gt;Share your profile publically to build up your own community of followers.&lt;/li&gt;
-&lt;/ul&gt;&lt;h4&gt;Updates&lt;/h4&gt;
-&lt;ul&gt;&lt;li&gt;Synchronize versions of plug-ins and Eclipse releases – with your whole team or all your followers at once.&lt;/li&gt;
-&lt;li&gt;Always get the latest updates for your profiles. Be it plug-ins or the latest Eclipse release, you never have to start from scratch again.&lt;/li&gt;
-&lt;/ul&gt;&lt;h4&gt;Management&lt;/h4&gt;
-&lt;ul&gt;&lt;li&gt;Start any profile directly from the Yatta Launcher, or create your own desktop shortcuts.&lt;/li&gt;
-&lt;li&gt;See the contents of your profile at a single glance.&lt;/li&gt;
-&lt;li&gt;Rearrange your profile list via drag and drop to find your favorite profiles faster.&lt;/li&gt;
-&lt;li&gt;Make your profile unique: Customize name, description, color, and icon.&lt;/li&gt;
-&lt;/ul&gt;&lt;h3&gt;Components&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;The Client&lt;/strong&gt; – Eclipse plug-in that lets you share and update your running Eclipse (profile) directly from within your IDE.&lt;/p&gt;
-&lt;p align=&quot;center&quot;&gt;
-		&lt;a href=&quot;https://www.yatta.de/profiles?utm_source=eclipse&amp;amp;utm_medium=marketplace%20entry&amp;amp;utm_campaign=Eclipse%20Promoted%20Solution&amp;amp;utm_term=promoted%20solution&quot; target=&quot;_blank&quot;&gt;&lt;br /&gt;&lt;img src=&quot;http://marketplace.yatta.de/static/content/eclipse-marketplace/launcher-start.png&quot; border=&quot;0&quot; alt=&quot;The Client-Plug-In in the Eclipse toolbar&quot; style=&quot;max-width: 80%; max-height=80%; height:auto; width:auto;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;The Launcher&lt;/strong&gt; – Lightweight desktop app to help you manage all your Eclipse installations: Install, start, update, share or uninstall any profile via the Launcher.&lt;/p&gt;
-&lt;p align=&quot;center&quot;&gt;
-		&lt;a href=&quot;https://www.yatta.de/profiles?utm_source=eclipse&amp;amp;utm_medium=marketplace%20entry&amp;amp;utm_campaign=Eclipse%20Promoted%20Solution&amp;amp;utm_term=promoted%20solution&quot; target=&quot;_blank&quot;&gt;&lt;br /&gt;&lt;img src=&quot;http://marketplace.yatta.de/static/content/eclipse-marketplace/launcher.png&quot; border=&quot;0&quot; alt=&quot;The Launcher Interface&quot; style=&quot;max-width: 80%; max-height=80%; height:auto; width:auto;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;The Profiles Hub&lt;/strong&gt; – The &lt;a href=&quot;https://www.yatta.de/profiles/hub?utm_source=eclipse&amp;amp;utm_medium=marketplace%20entry&amp;amp;utm_campaign=Eclipse%20Promoted%20Solution&amp;amp;utm_term=promoted%20solution&quot; target=&quot;_blank&quot;&gt;Profiles Hub&lt;/a&gt; is the central Hub for downloading Eclipse profiles. When you share a profile, it will be available on the Profiles Hub. If you are searching for a profile that meets the requirements of your project - for example a certain set of plug-ins - the Profiles Hub is the place to visit. Use the search and filter functions to find what you are looking for. From the Profiles Hub, you can access any profile that&#039;s publicly available.&lt;/p&gt;
-&lt;p&gt;Yatta Profiles was designed to make starting new projects with Eclipse really simple. The best thing: Yatta Profiles for Eclipse is completey free - &lt;a href=&quot;https://www.yatta.de/profiles?utm_source=eclipse&amp;amp;utm_medium=marketplace%20entry&amp;amp;utm_campaign=Eclipse%20Promoted%20Solution&amp;amp;utm_term=promoted%20solution&quot; target=&quot;_blank&quot;&gt;so go ahead and try it!&lt;/a&gt;&lt;/p&gt;
-&lt;h3&gt;Use Cases&lt;/h3&gt;
-&lt;p&gt;Profiles help you manage all your Eclipse installations. Just install the Launcher, and you are good to go. With Profiles, you, your team, or your users will be able to install and update any project setup. Here are some use cases:&lt;/p&gt;
-&lt;ul&gt;&lt;li&gt;Easily manage your local installations:
-&lt;ul&gt;&lt;li&gt;Start a specific Eclipse setup.&lt;/li&gt;
-&lt;li&gt;Make your setups distinct with a name, an icon and a description.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Share your Eclipse setup with a fellow on your project team:
-&lt;ul&gt;&lt;li&gt;Help new team members get productive.&lt;/li&gt;
-&lt;li&gt;Distribute your new project setup faster. Stop sending zip files with Eclipse setups.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Create profile templates for your team(s):
-&lt;ul&gt;&lt;li&gt;Create, describe and distribute you profiles for project teams, specific tasks or requirements.&lt;/li&gt;
-&lt;li&gt;Automatically inform profile followers about profile updates.&lt;/li&gt;
-&lt;li&gt;Build profile Chains and manage Eclipse setups within your enterprise and across your teams.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Transfer your Eclipse setup to a new workstation:
-&lt;ul&gt;&lt;li&gt;Install your profile on another Operating system.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;h3&gt;Download Yatta Profiles for Eclipse&lt;/h3&gt;
-&lt;p&gt;Visit our &lt;a href=&quot;https://www.yatta.de/profiles?utm_source=eclipse&amp;amp;utm_medium=marketplace%20entry&amp;amp;utm_campaign=Eclipse%20Promoted%20Solution&amp;amp;utm_term=promoted%20solution&quot; target=&quot;_blank&quot;&gt;website&lt;/a&gt; for more information and free download.&lt;/p&gt;
-&lt;p&gt;Note that Profiles is still beta but stable – and productive. Anyhow, don&#039;t hesitate to send us feedback or file an error report in case anything doesn&#039;t work as intended.&lt;/p&gt;
-&lt;p&gt;We are working hard to continuously improve Profiles as well as other parts of the Eclipse IDE. Stay tuned for our roadmap. There is a lot more to come. You have a feature request? &lt;a href=&quot;http://www.yatta.de/contact/&quot;&gt;Send us an email!&lt;/a&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot;&gt;
-		&lt;a href=&quot;https://www.yatta.de/profiles?utm_source=eclipse&amp;amp;utm_medium=marketplace%20entry&amp;amp;utm_campaign=Eclipse%20Promoted%20Solution&amp;amp;utm_term=promoted%20solution?download&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://marketplace.yatta.de/static/content/eclipse-marketplace/download.png&quot; border=&quot;0&quot; alt=&quot;DOWNLOAD NOW&quot; /&gt;&lt;/a&gt;
-	&lt;/p&gt;
-&lt;h3&gt;Contact us&lt;/h3&gt;
-&lt;p&gt;Do you need more information? &lt;a href=&quot;http://www.yatta.de/contact/&quot;&gt;Contact us&lt;/a&gt; and follow the latest Yatta News on &lt;a href=&quot;http://twitter.com/YattaSolutions/&quot;&gt;Twitter&lt;/a&gt;, &lt;a href=&quot;http://facebook.com/YattaSolutions/&quot;&gt;Facebook&lt;/a&gt; or &lt;a href=&quot;https://plus.google.com/112332560095044183443/posts&quot;&gt;Google +&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
-     <pubDate>Thu, 24 Sep 2015 09:17:52 +0000</pubDate>
- <dc:creator>febelshuser</dc:creator>
- <guid isPermaLink="false">2540018 at http://marketplace.eclipse.org</guid>
- <comments>http://marketplace.eclipse.org/content/yatta-launcher-eclipse#comments</comments>
-  </item>
-  <item>
-    <title>Nasdanika Story Editor</title>
-    <link>http://marketplace.eclipse.org/content/nasdanika-story-editor</link>
-    <description>&lt;div class=&quot;field field-name-field-resource-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;http://marketplace.eclipse.org/sites/default/files/default_images/default_2.png&quot; width=&quot;110&quot; height=&quot;80&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-created field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Created:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Fri, 2016-06-24 11:31&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-shared-date-updated field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Date Updated:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;Wed, 2017-04-05 21:18&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;/search/content/%22Nasdanika%22&quot;&gt;Nasdanika&lt;/a&gt;&lt;div class=&quot;field field-name-shared-submitted-by field-type-text field-label-inline clearfix&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Submitted by:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;/user/pvlasov575/listings&quot; title=&quot;Pavel Vlasov&quot;&gt;Pavel Vlasov&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;p&gt;EMF-based tree editor for the Nasdanika Story Model (&lt;a href=&quot;http://www.nasdanika.org/server/apidocs/org.nasdanika.story/apidocs/index.html&quot;&gt;http://www.nasdanika.org/server/apidocs/org.nasdanika.story/apidocs/inde...&lt;/a&gt;) - Actors, Stories, Epics, Acceptance Criteria, ...&lt;/p&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;!-- google_ad_section_end --&gt;</description>
-     <pubDate>Fri, 24 Jun 2016 15:31:45 +0000</pubDate>
- <dc:creator>pvlasov575</dc:creator>
- <guid isPermaLink="false">2944656 at http://marketplace.eclipse.org</guid>
- <comments>http://marketplace.eclipse.org/content/nasdanika-story-editor#comments</comments>
   </item>
   </channel>
 </rss>
