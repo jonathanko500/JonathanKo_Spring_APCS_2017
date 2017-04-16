@@ -11,16 +11,14 @@ public class RealCell implements Cell {
     public RealCell(String value){
         input=value;
     }
-    public double ifDouble(){
+    public double getDoubleValue(){
         return 0;
     }
-    
     @Override
     public String abbreviatedCellText() {
-        String text = input + "";
+        String text = input + "                           ";//truncates to 10 values
         return text.substring(0,10);
     }
-
     @Override
     public String fullCellText() {
         return input;

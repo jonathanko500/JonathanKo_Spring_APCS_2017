@@ -75,25 +75,20 @@ public class Spreadsheet implements Grid{
 	@Override
 	public String getGridText(){
 		String spreadsheet = "";
-		spreadsheet += "   |";
-		char columnValue = 'A';
-		for(int i=0;i<12; i++){//makes the columns
-			spreadsheet+=((char)(columnValue)) + "         |";
-			columnValue+=1;
-		}
-		spreadsheet +="\n";
-		for (int i = 0; i < 20; i++){//makes row
-			if(i<9){
-				spreadsheet += (i+1) + "  |";//one digit row
-			} else {
-				spreadsheet += (i+1) + " |";//two digit row
+		spreadsheet ="   |A         |B         |C         |D         |E         |F         |G         |H         |I         |J         |K         |L         |"+"\n";//cols assigned letter
+		for (int i=0;i<20;i++){//makes rows
+			if(i<9)
+				spreadsheet = spreadsheet +(i+1)+"  ";//row value is one digit
+			else 
+				spreadsheet = spreadsheet +(i+1)+" ";//row value is 2 digit
+			for (int h=0;h<12;h++){
+				spreadsheet=spreadsheet+"|"+ sheet[i][h].abbreviatedCellText();//cols
 			}
-			for(int j = 0; j<12 ; j++){
-				spreadsheet += sheet[i][j].abbreviatedCellText() + "|";
-			}
-			spreadsheet += "\n";
+			spreadsheet+="|\n";
 		}
+		
 		return spreadsheet;
 	}
+		
 
 }
