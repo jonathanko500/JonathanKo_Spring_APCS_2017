@@ -53,6 +53,35 @@ public class Spreadsheet implements Grid{
 				return textInCell;
 			}
 		}
+		if(command.charAt(command.length()-1)=='%'){
+			input[1]=input[1].toUpperCase();
+			SpreadsheetLocation lowlife= new SpreadsheetLocation(input[0]);
+			sheet[lowlife.getRow()][lowlife.getCol()]=new PercentCell(input[2]);
+			return getGridText();
+		}
+		if(input.length>1){
+			if(input[1].equals("=")){
+				if(input[2].substring(0,1).equals("\"")==false){
+					SpreadsheetLocation lowlife= new SpreadsheetLocation(input[0]);
+				if (input.length==3){
+					sheet[lowlife.getRow()][lowlife.getCol()]=new ValueCell(input[2]);
+					
+				}else{
+					String foodie="";
+					for(int i=2;i<input.length;i++){
+						if(i>=3){
+							foodie+=" ";
+						}
+						foodie+=input[i];
+						
+					}
+					sheet[lowlife.getRow()][lowlife.getCol()]=new FormulaCell(foodie);
+					
+				}
+				return getGridText();
+				}
+			}
+		}
 		return "";
 	}
 	
